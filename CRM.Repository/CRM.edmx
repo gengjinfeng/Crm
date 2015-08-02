@@ -1,0 +1,1221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Iso58Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="300" />
+          <Property Name="CorporationName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" />
+          <Property Name="Industry" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentID" Type="bigint" Nullable="false" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="100" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileTel" Type="nvarchar" MaxLength="100" />
+          <Property Name="SourseFrom" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerType" Type="nvarchar" MaxLength="50" />
+          <Property Name="NextContactTime" Type="datetime" />
+          <Property Name="LastModify" Type="datetime" />
+          <Property Name="Province" Type="nvarchar" MaxLength="100" />
+          <Property Name="RegisteredCapital" Type="float" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="WebSite" Type="nvarchar(max)" />
+          <Property Name="WebSiteRemark" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Owner" Type="bigint" Nullable="false" />
+          <Property Name="FirstContactDate" Type="datetime" />
+          <Property Name="FirstRemark" Type="nvarchar(max)" />
+          <Property Name="SecondContactDate" Type="datetime" />
+          <Property Name="SecondRemark" Type="nvarchar(max)" />
+          <Property Name="ThirdContactDate" Type="datetime" />
+          <Property Name="ThirdRemark" Type="nvarchar(max)" />
+          <Property Name="FourthContactDate" Type="datetime" />
+          <Property Name="FourthRemark" Type="nvarchar(max)" />
+          <Property Name="FifthContactDate" Type="datetime" />
+          <Property Name="FifthRemark" Type="nvarchar(max)" />
+          <Property Name="SixthContactDate" Type="datetime" />
+          <Property Name="SixthRemark" Type="nvarchar(max)" />
+          <Property Name="SeventhContactDate" Type="datetime" />
+          <Property Name="SeventhRemark" Type="nvarchar(max)" />
+          <Property Name="EighthContactDate" Type="datetime" />
+          <Property Name="EighthRemark" Type="nvarchar(max)" />
+          <Property Name="NinthContactDate" Type="datetime" />
+          <Property Name="NinthRemark" Type="nvarchar(max)" />
+          <Property Name="TenthContactDate" Type="datetime" />
+          <Property Name="TenthRemark" Type="nvarchar(max)" />
+          <Property Name="PoolStatus" Type="smallint" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ElevenContactDate" Type="datetime" />
+          <Property Name="ElevenRemark" Type="nvarchar(max)" />
+          <Property Name="twelveContactDate" Type="datetime" />
+          <Property Name="twelveRemark" Type="nvarchar(max)" />
+          <Property Name="thirteenContactDate" Type="datetime" />
+          <Property Name="thirteenRemark" Type="nvarchar(max)" />
+          <Property Name="fourteenContactDate" Type="datetime" />
+          <Property Name="fourteenRemark" Type="nvarchar(max)" />
+          <Property Name="fifteenContactDate" Type="datetime" />
+          <Property Name="fifteenRemark" Type="nvarchar(max)" />
+          <Property Name="sixteenContactDate" Type="datetime" />
+          <Property Name="sixteenRemark" Type="nvarchar(max)" />
+          <Property Name="seventeenContactDate" Type="datetime" />
+          <Property Name="seventeenRemark" Type="nvarchar(max)" />
+          <Property Name="eighteenContactDate" Type="datetime" />
+          <Property Name="eighteenRemark" Type="nvarchar(max)" />
+          <Property Name="nineteenContactDate" Type="datetime" />
+          <Property Name="nineteenRemark" Type="nvarchar(max)" />
+          <Property Name="twentyContactDate" Type="datetime" />
+          <Property Name="twentyRemark" Type="nvarchar(max)" />
+          <Property Name="Creator" Type="bigint" />
+          <Property Name="BelongDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DataDictionary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="group_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="group_name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="DataDictionaryItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dataitem_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="dataitem_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="group_code" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DEPARTMENTID" />
+          </Key>
+          <Property Name="DEPARTMENTID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DEPARTMENTNAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="MANAGER" Type="nvarchar" MaxLength="50" />
+          <Property Name="DEPDESCRIPTION" Type="nvarchar" MaxLength="300" />
+          <Property Name="FACTORYID" Type="bigint" Nullable="false" />
+          <Property Name="PARENTDEPID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Factory">
+          <Key>
+            <PropertyRef Name="C_FACTORYID" />
+          </Key>
+          <Property Name="C_FACTORYID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C_FactoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="C_FACTORYDES" Type="nvarchar" MaxLength="300" />
+          <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="ADDRESS" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Function">
+          <Key>
+            <PropertyRef Name="PURVIEWID" />
+          </Key>
+          <Property Name="PURVIEWID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FuncationCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MenuID" Type="bigint" Nullable="false" />
+          <Property Name="ORDERQTY" Type="int" />
+          <Property Name="FUNCTIONNAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TOOLTIPTEXT" Type="nvarchar" MaxLength="50" />
+          <Property Name="FunctionImages" Type="nvarchar" MaxLength="50" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Level" Type="nvarchar" MaxLength="50" />
+          <Property Name="Message" Type="nvarchar" MaxLength="3000" />
+          <Property Name="Exception" Type="nvarchar(max)" />
+          <Property Name="IpAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="bigint" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="MenuId" />
+          </Key>
+          <Property Name="MenuId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MenuImage" Type="nvarchar" MaxLength="50" />
+          <Property Name="ORDERQTY" Type="int" />
+          <Property Name="ParentMenuId" Type="bigint" Nullable="false" />
+          <Property Name="REMARK" Type="nvarchar" MaxLength="50" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Period" Type="nvarchar" MaxLength="50" />
+          <Property Name="Keyword" Type="nvarchar" MaxLength="50" />
+          <Property Name="KeywordAttach" Type="nvarchar" MaxLength="50" />
+          <Property Name="Url" Type="nvarchar" MaxLength="50" />
+          <Property Name="IDCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="TemplateCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Idea" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaiduAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaiduPwd" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaiduAnswer" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderRemark" Type="nvarchar" MaxLength="3000" />
+          <Property Name="ContractCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContractMoney" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContractRealArrival" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContractModifyfee" Type="nvarchar" MaxLength="50" />
+          <Property Name="CheckStatus" Type="nchar" MaxLength="10" />
+          <Property Name="Product" Type="nvarchar" MaxLength="50" />
+          <Property Name="OnlineEngine" Type="nvarchar" MaxLength="50" />
+          <Property Name="PauseEngine" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShopStatus" Type="nchar" MaxLength="10" />
+          <Property Name="ShopAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="FollowUpPerson" Type="ntext" />
+          <Property Name="ShopMakeStarttime" Type="datetime" />
+          <Property Name="ShopMakeEndtime" Type="datetime" />
+          <Property Name="ShopRemark" Type="nvarchar" MaxLength="3000" />
+          <Property Name="OrderStatus" Type="nchar" MaxLength="10" />
+          <Property Name="GuideStarttime" Type="datetime" />
+          <Property Name="GuideEndtime" Type="datetime" />
+          <Property Name="NuggetStarttime" Type="datetime" />
+          <Property Name="NuggetEndtime" Type="datetime" />
+          <Property Name="OperationRemark" Type="nvarchar" MaxLength="3000" />
+          <Property Name="CustomerStatus" Type="nchar" MaxLength="10" />
+          <Property Name="CustomerId" Type="bigint" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="SignBill" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLEID" Type="bigint" Nullable="false" />
+          <Property Name="PURVIEWID" Type="bigint" Nullable="false" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ROLEID" />
+          </Key>
+          <Property Name="ROLEID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLENAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="100" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLEID" Type="bigint" Nullable="false" />
+          <Property Name="USERNAME" Type="nchar" MaxLength="50" />
+          <Property Name="PHONE" Type="nchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nchar" MaxLength="50" />
+          <Property Name="PASSWORD" Type="nvarchar" MaxLength="100" />
+          <Property Name="DEPARTMENTID" Type="bigint" Nullable="false" />
+          <Property Name="USERTYPE" Type="tinyint" />
+          <Property Name="USERSTATE" Type="bit" />
+          <Property Name="MOBILEPHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Customer_Dep">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="USERID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Department_Factory">
+          <End Role="Factory" Type="Self.Factory" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factory">
+              <PropertyRef Name="C_FACTORYID" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="FACTORYID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_ToCustomer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Function">
+          <End Role="Function" Type="Self.Function" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Function">
+              <PropertyRef Name="PURVIEWID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="PURVIEWID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Menu">
+          <End Role="Menu" Type="Self.Menu" Multiplicity="1" />
+          <End Role="Function" Type="Self.Function" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="MenuId" />
+            </Principal>
+            <Dependent Role="Function">
+              <PropertyRef Name="MenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ROLEID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="ROLEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Dep">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ROLEID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ROLEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_perf_stats_azure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="appname" Type="nvarchar" Mode="In" />
+          <Parameter Name="runtime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_perf_stats_azure_infrequent11" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="runtime" Type="datetime" Mode="In" />
+          <Parameter Name="firstrun" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="Iso58ModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataDictionary" EntityType="Self.DataDictionary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataDictionaryItems" EntityType="Self.DataDictionaryItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Factory" EntityType="Self.Factory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Function" EntityType="Self.Function" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Customer_Dep" Association="Self.FK_Customer_Dep">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Department_Factory" Association="Self.FK_Department_Factory">
+            <End Role="Factory" EntitySet="Factory" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_ToCustomer" Association="Self.FK_Order_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Function" Association="Self.FK_Permission_Function">
+            <End Role="Function" EntitySet="Function" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Menu" Association="Self.FK_Permission_Menu">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="Function" EntitySet="Function" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Role" Association="Self.FK_Permission_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Dep" Association="Self.FK_User_Dep">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Iso58Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CorporationName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Industry" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="DepartmentID" Type="Int64" Nullable="false" />
+          <Property Name="Tel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileTel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SourseFrom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NextContactTime" Type="DateTime" Precision="3" />
+          <Property Name="LastModify" Type="DateTime" Precision="3" />
+          <Property Name="Province" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RegisteredCapital" Type="Double" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WebSite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WebSiteRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Owner" Type="Int64" Nullable="false" />
+          <Property Name="FirstContactDate" Type="DateTime" Precision="3" />
+          <Property Name="FirstRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecondContactDate" Type="DateTime" Precision="3" />
+          <Property Name="SecondRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ThirdContactDate" Type="DateTime" Precision="3" />
+          <Property Name="ThirdRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FourthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="FourthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FifthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="FifthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SixthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="SixthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SeventhContactDate" Type="DateTime" Precision="3" />
+          <Property Name="SeventhRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EighthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="EighthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NinthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="NinthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TenthContactDate" Type="DateTime" Precision="3" />
+          <Property Name="TenthRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PoolStatus" Type="Int16" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Customer_Dep" FromRole="Customer" ToRole="Department" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Customer_User" FromRole="Customer" ToRole="User" />
+          <Property Name="ElevenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="ElevenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="twelveContactDate" Type="DateTime" Precision="3" />
+          <Property Name="twelveRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="thirteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="thirteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fourteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="fourteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fifteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="fifteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sixteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="sixteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="seventeenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="seventeenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="eighteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="eighteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nineteenContactDate" Type="DateTime" Precision="3" />
+          <Property Name="nineteenRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="twentyContactDate" Type="DateTime" Precision="3" />
+          <Property Name="twentyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Creator" Type="Int64" />
+          <Property Name="BelongDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Iso58Model.FK_Order_ToCustomer" FromRole="Customer" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="DataDictionary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="group_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="group_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DataDictionaryItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dataitem_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dataitem_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="group_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DEPARTMENTID" />
+          </Key>
+          <Property Name="DEPARTMENTID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DEPARTMENTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MANAGER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DEPDESCRIPTION" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="FACTORYID" Type="Int64" Nullable="false" />
+          <Property Name="PARENTDEPID" Type="Int64" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Customer_Dep" FromRole="Department" ToRole="Customer" />
+          <NavigationProperty Name="Factory" Relationship="Self.FK_Department_Factory" FromRole="Department" ToRole="Factory" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Dep" FromRole="Department" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Factory">
+          <Key>
+            <PropertyRef Name="C_FACTORYID" />
+          </Key>
+          <Property Name="C_FACTORYID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C_FactoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="C_FACTORYDES" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Department_Factory" FromRole="Factory" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="Function">
+          <Key>
+            <PropertyRef Name="PURVIEWID" />
+          </Key>
+          <Property Name="PURVIEWID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FuncationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MenuID" Type="Int64" Nullable="false" />
+          <Property Name="ORDERQTY" Type="Int32" />
+          <Property Name="FUNCTIONNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TOOLTIPTEXT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FunctionImages" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Permission" Relationship="Self.FK_Permission_Function" FromRole="Function" ToRole="Permission" />
+          <NavigationProperty Name="Menu" Relationship="Self.FK_Permission_Menu" FromRole="Function" ToRole="Menu" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IpAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int64" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="MenuId" />
+          </Key>
+          <Property Name="MenuId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MenuImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ORDERQTY" Type="Int32" />
+          <Property Name="ParentMenuId" Type="Int64" Nullable="false" />
+          <Property Name="REMARK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Function" Relationship="Self.FK_Permission_Menu" FromRole="Menu" ToRole="Function" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLEID" Type="Int64" Nullable="false" />
+          <Property Name="PURVIEWID" Type="Int64" Nullable="false" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Function" Relationship="Self.FK_Permission_Function" FromRole="Permission" ToRole="Function" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Permission_Role" FromRole="Permission" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ROLEID" />
+          </Key>
+          <Property Name="ROLEID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLENAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Permission" Relationship="Self.FK_Permission_Role" FromRole="Role" ToRole="Permission" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLEID" Type="Int64" Nullable="false" />
+          <Property Name="USERNAME" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="PASSWORD" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DEPARTMENTID" Type="Int64" Nullable="false" />
+          <Property Name="USERTYPE" Type="Byte" />
+          <Property Name="USERSTATE" Type="Boolean" />
+          <Property Name="MOBILEPHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Customer_User" FromRole="User" ToRole="Customer" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_User_Dep" FromRole="User" ToRole="Department" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+        </EntityType>
+        <Association Name="FK_Customer_Dep">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="USERID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Department_Factory">
+          <End Role="Factory" Type="Self.Factory" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factory">
+              <PropertyRef Name="C_FACTORYID" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="FACTORYID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Dep">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Function">
+          <End Role="Function" Type="Self.Function" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Function">
+              <PropertyRef Name="PURVIEWID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="PURVIEWID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Menu">
+          <End Role="Menu" Type="Self.Menu" Multiplicity="1" />
+          <End Role="Function" Type="Self.Function" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="MenuId" />
+            </Principal>
+            <Dependent Role="Function">
+              <PropertyRef Name="MenuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ROLEID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="ROLEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ROLEID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ROLEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Iso58Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customer" EntityType="Self.Customer" />
+          <EntitySet Name="DataDictionary" EntityType="Self.DataDictionary" />
+          <EntitySet Name="DataDictionaryItems" EntityType="Self.DataDictionaryItems" />
+          <EntitySet Name="Department" EntityType="Self.Department" />
+          <EntitySet Name="Factory" EntityType="Self.Factory" />
+          <EntitySet Name="Function" EntityType="Self.Function" />
+          <EntitySet Name="Log" EntityType="Self.Log" />
+          <EntitySet Name="Menu" EntityType="Self.Menu" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Customer_Dep" Association="Self.FK_Customer_Dep">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Department_Factory" Association="Self.FK_Department_Factory">
+            <End Role="Factory" EntitySet="Factory" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Dep" Association="Self.FK_User_Dep">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Function" Association="Self.FK_Permission_Function">
+            <End Role="Function" EntitySet="Function" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Menu" Association="Self.FK_Permission_Menu">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="Function" EntitySet="Function" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_Role" Association="Self.FK_Permission_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <FunctionImport Name="sp_perf_stats_azure" ReturnType="Collection(Iso58Model.sp_perf_stats_azure_Result)">
+            <Parameter Name="appname" Mode="In" Type="String" />
+            <Parameter Name="runtime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_perf_stats_azure_infrequent11" ReturnType="Collection(Iso58Model.sp_perf_stats_azure_infrequent11_Result)">
+            <Parameter Name="runtime" Mode="In" Type="DateTime" />
+            <Parameter Name="firstrun" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Order" EntityType="Iso58Model.Order" />
+          <AssociationSet Name="FK_Order_ToCustomer" Association="Iso58Model.FK_Order_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="sp_perf_stats_azure_Result">
+          <Property Type="String" Name="runtime" Nullable="true" MaxLength="30" />
+          <Property Type="Int16" Name="session_id" Nullable="true" />
+          <Property Type="Int32" Name="request_id" Nullable="true" />
+          <Property Type="Int32" Name="ecid" Nullable="true" />
+          <Property Type="Int16" Name="blocking_session_id" Nullable="true" />
+          <Property Type="Int32" Name="blocking_ecid" Nullable="true" />
+          <Property Type="String" Name="task_state" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="wait_type" Nullable="true" MaxLength="60" />
+          <Property Type="Int64" Name="wait_duration_ms" Nullable="true" />
+          <Property Type="String" Name="wait_resource" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="resource_description" Nullable="true" MaxLength="140" />
+          <Property Type="String" Name="last_wait_type" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="open_trans" Nullable="true" />
+          <Property Type="String" Name="transaction_isolation_level" Nullable="true" MaxLength="30" />
+          <Property Type="Boolean" Name="is_user_process" Nullable="true" />
+          <Property Type="Int32" Name="request_cpu_time" Nullable="true" />
+          <Property Type="Int64" Name="request_logical_reads" Nullable="true" />
+          <Property Type="Int64" Name="request_reads" Nullable="true" />
+          <Property Type="Int64" Name="request_writes" Nullable="true" />
+          <Property Type="Int32" Name="memory_usage" Nullable="true" />
+          <Property Type="Int32" Name="session_cpu_time" Nullable="true" />
+          <Property Type="Int64" Name="session_reads" Nullable="true" />
+          <Property Type="Int64" Name="session_writes" Nullable="true" />
+          <Property Type="Int64" Name="session_logical_reads" Nullable="true" />
+          <Property Type="Int32" Name="total_scheduled_time" Nullable="true" />
+          <Property Type="Int32" Name="total_elapsed_time" Nullable="true" />
+          <Property Type="String" Name="last_request_start_time" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="last_request_end_time" Nullable="true" MaxLength="30" />
+          <Property Type="Int64" Name="session_row_count" Nullable="true" />
+          <Property Type="Int32" Name="prev_error" Nullable="true" />
+          <Property Type="Int32" Name="open_resultsets" Nullable="true" />
+          <Property Type="Int32" Name="request_total_elapsed_time" Nullable="true" />
+          <Property Type="Decimal" Name="percent_complete" Nullable="true" Precision="5" Scale="2" />
+          <Property Type="Int64" Name="est_completion_time" Nullable="true" />
+          <Property Type="String" Name="tran_name" Nullable="true" MaxLength="24" />
+          <Property Type="String" Name="transaction_begin_time" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="tran_type" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="tran_state" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="request_start_time" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="request_status" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="command" Nullable="true" MaxLength="16" />
+          <Property Type="Int32" Name="statement_start_offset" Nullable="true" />
+          <Property Type="Int32" Name="statement_end_offset" Nullable="true" />
+          <Property Type="Int16" Name="database_id" Nullable="true" />
+          <Property Type="Int32" Name="user_id" Nullable="true" />
+          <Property Type="Boolean" Name="executing_managed_code" Nullable="true" />
+          <Property Type="Int32" Name="pending_io_count" Nullable="true" />
+          <Property Type="String" Name="login_time" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="host_name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="program_name" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="host_process_id" Nullable="true" />
+          <Property Type="Int32" Name="client_version" Nullable="true" />
+          <Property Type="String" Name="client_interface_name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="login_name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="nt_domain" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="nt_user_name" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="net_packet_size" Nullable="true" />
+          <Property Type="String" Name="client_net_address" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="session_status" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="scheduler_id" Nullable="true" />
+          <Property Type="Int32" Name="group_id" Nullable="true" />
+          <Property Type="Binary" Name="context_info" Nullable="true" MaxLength="128" />
+        </ComplexType>
+        <ComplexType Name="sp_perf_stats_azure_infrequent11_Result">
+          <Property Type="String" Name="runtime" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="wait_type" Nullable="true" MaxLength="45" />
+          <Property Type="Int64" Name="waiting_tasks_count" Nullable="false" />
+          <Property Type="Int64" Name="wait_time_ms" Nullable="false" />
+          <Property Type="Int64" Name="max_wait_time_ms" Nullable="false" />
+          <Property Type="Int64" Name="signal_wait_time_ms" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Period" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Keyword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KeywordAttach" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IDCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TemplateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Idea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaiduAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaiduPwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaiduAnswer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderRemark" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+          <Property Name="ContractCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContractMoney" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContractRealArrival" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContractModifyfee" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CheckStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Product" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OnlineEngine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PauseEngine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShopStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ShopAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FollowUpPerson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopMakeStarttime" Type="DateTime" Precision="3" />
+          <Property Name="ShopMakeEndtime" Type="DateTime" Precision="3" />
+          <Property Name="ShopRemark" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+          <Property Name="OrderStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="GuideStarttime" Type="DateTime" Precision="3" />
+          <Property Name="GuideEndtime" Type="DateTime" Precision="3" />
+          <Property Name="NuggetStarttime" Type="DateTime" Precision="3" />
+          <Property Name="NuggetEndtime" Type="DateTime" Precision="3" />
+          <Property Name="OperationRemark" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="CustomerId" Type="Int64" Nullable="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Iso58Model.FK_Order_ToCustomer" FromRole="Order" ToRole="Customer" />
+          <Property Name="SignBill" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Order_ToCustomer">
+          <End Type="Iso58Model.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="Iso58Model.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Iso58ModelStoreContainer" CdmEntityContainer="Iso58Entities">
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="Iso58Model.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="BelongDateTime" ColumnName="BelongDateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="twentyRemark" ColumnName="twentyRemark" />
+                <ScalarProperty Name="twentyContactDate" ColumnName="twentyContactDate" />
+                <ScalarProperty Name="nineteenRemark" ColumnName="nineteenRemark" />
+                <ScalarProperty Name="nineteenContactDate" ColumnName="nineteenContactDate" />
+                <ScalarProperty Name="eighteenRemark" ColumnName="eighteenRemark" />
+                <ScalarProperty Name="eighteenContactDate" ColumnName="eighteenContactDate" />
+                <ScalarProperty Name="seventeenRemark" ColumnName="seventeenRemark" />
+                <ScalarProperty Name="seventeenContactDate" ColumnName="seventeenContactDate" />
+                <ScalarProperty Name="sixteenRemark" ColumnName="sixteenRemark" />
+                <ScalarProperty Name="sixteenContactDate" ColumnName="sixteenContactDate" />
+                <ScalarProperty Name="fifteenRemark" ColumnName="fifteenRemark" />
+                <ScalarProperty Name="fifteenContactDate" ColumnName="fifteenContactDate" />
+                <ScalarProperty Name="fourteenRemark" ColumnName="fourteenRemark" />
+                <ScalarProperty Name="fourteenContactDate" ColumnName="fourteenContactDate" />
+                <ScalarProperty Name="thirteenRemark" ColumnName="thirteenRemark" />
+                <ScalarProperty Name="thirteenContactDate" ColumnName="thirteenContactDate" />
+                <ScalarProperty Name="twelveRemark" ColumnName="twelveRemark" />
+                <ScalarProperty Name="twelveContactDate" ColumnName="twelveContactDate" />
+                <ScalarProperty Name="ElevenRemark" ColumnName="ElevenRemark" />
+                <ScalarProperty Name="ElevenContactDate" ColumnName="ElevenContactDate" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CorporationName" ColumnName="CorporationName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Industry" ColumnName="Industry" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="MobileTel" ColumnName="MobileTel" />
+                <ScalarProperty Name="SourseFrom" ColumnName="SourseFrom" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="NextContactTime" ColumnName="NextContactTime" />
+                <ScalarProperty Name="LastModify" ColumnName="LastModify" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="RegisteredCapital" ColumnName="RegisteredCapital" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="WebSiteRemark" ColumnName="WebSiteRemark" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="FirstContactDate" ColumnName="FirstContactDate" />
+                <ScalarProperty Name="FirstRemark" ColumnName="FirstRemark" />
+                <ScalarProperty Name="SecondContactDate" ColumnName="SecondContactDate" />
+                <ScalarProperty Name="SecondRemark" ColumnName="SecondRemark" />
+                <ScalarProperty Name="ThirdContactDate" ColumnName="ThirdContactDate" />
+                <ScalarProperty Name="ThirdRemark" ColumnName="ThirdRemark" />
+                <ScalarProperty Name="FourthContactDate" ColumnName="FourthContactDate" />
+                <ScalarProperty Name="FourthRemark" ColumnName="FourthRemark" />
+                <ScalarProperty Name="FifthContactDate" ColumnName="FifthContactDate" />
+                <ScalarProperty Name="FifthRemark" ColumnName="FifthRemark" />
+                <ScalarProperty Name="SixthContactDate" ColumnName="SixthContactDate" />
+                <ScalarProperty Name="SixthRemark" ColumnName="SixthRemark" />
+                <ScalarProperty Name="SeventhContactDate" ColumnName="SeventhContactDate" />
+                <ScalarProperty Name="SeventhRemark" ColumnName="SeventhRemark" />
+                <ScalarProperty Name="EighthContactDate" ColumnName="EighthContactDate" />
+                <ScalarProperty Name="EighthRemark" ColumnName="EighthRemark" />
+                <ScalarProperty Name="NinthContactDate" ColumnName="NinthContactDate" />
+                <ScalarProperty Name="NinthRemark" ColumnName="NinthRemark" />
+                <ScalarProperty Name="TenthContactDate" ColumnName="TenthContactDate" />
+                <ScalarProperty Name="TenthRemark" ColumnName="TenthRemark" />
+                <ScalarProperty Name="PoolStatus" ColumnName="PoolStatus" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataDictionary">
+            <EntityTypeMapping TypeName="Iso58Model.DataDictionary">
+              <MappingFragment StoreEntitySet="DataDictionary">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="group_code" ColumnName="group_code" />
+                <ScalarProperty Name="group_name" ColumnName="group_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataDictionaryItems">
+            <EntityTypeMapping TypeName="Iso58Model.DataDictionaryItems">
+              <MappingFragment StoreEntitySet="DataDictionaryItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="dataitem_code" ColumnName="dataitem_code" />
+                <ScalarProperty Name="dataitem_name" ColumnName="dataitem_name" />
+                <ScalarProperty Name="group_code" ColumnName="group_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Department">
+            <EntityTypeMapping TypeName="Iso58Model.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DEPARTMENTID" ColumnName="DEPARTMENTID" />
+                <ScalarProperty Name="DEPARTMENTNAME" ColumnName="DEPARTMENTNAME" />
+                <ScalarProperty Name="MANAGER" ColumnName="MANAGER" />
+                <ScalarProperty Name="DEPDESCRIPTION" ColumnName="DEPDESCRIPTION" />
+                <ScalarProperty Name="FACTORYID" ColumnName="FACTORYID" />
+                <ScalarProperty Name="PARENTDEPID" ColumnName="PARENTDEPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Factory">
+            <EntityTypeMapping TypeName="Iso58Model.Factory">
+              <MappingFragment StoreEntitySet="Factory">
+                <ScalarProperty Name="C_FACTORYID" ColumnName="C_FACTORYID" />
+                <ScalarProperty Name="C_FactoryName" ColumnName="C_FactoryName" />
+                <ScalarProperty Name="C_FACTORYDES" ColumnName="C_FACTORYDES" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Function">
+            <EntityTypeMapping TypeName="Iso58Model.Function">
+              <MappingFragment StoreEntitySet="Function">
+                <ScalarProperty Name="PURVIEWID" ColumnName="PURVIEWID" />
+                <ScalarProperty Name="FuncationCode" ColumnName="FuncationCode" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ORDERQTY" ColumnName="ORDERQTY" />
+                <ScalarProperty Name="FUNCTIONNAME" ColumnName="FUNCTIONNAME" />
+                <ScalarProperty Name="TOOLTIPTEXT" ColumnName="TOOLTIPTEXT" />
+                <ScalarProperty Name="FunctionImages" ColumnName="FunctionImages" />
+                <ScalarProperty Name="TR" ColumnName="TR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Log">
+            <EntityTypeMapping TypeName="Iso58Model.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Menu">
+            <EntityTypeMapping TypeName="Iso58Model.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="MenuImage" ColumnName="MenuImage" />
+                <ScalarProperty Name="ORDERQTY" ColumnName="ORDERQTY" />
+                <ScalarProperty Name="ParentMenuId" ColumnName="ParentMenuId" />
+                <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+                <ScalarProperty Name="TR" ColumnName="TR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permission">
+            <EntityTypeMapping TypeName="Iso58Model.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="PURVIEWID" ColumnName="PURVIEWID" />
+                <ScalarProperty Name="TR" ColumnName="TR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="Iso58Model.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="ROLENAME" ColumnName="ROLENAME" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="TR" ColumnName="TR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Iso58Model.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="DEPARTMENTID" ColumnName="DEPARTMENTID" />
+                <ScalarProperty Name="USERTYPE" ColumnName="USERTYPE" />
+                <ScalarProperty Name="USERSTATE" ColumnName="USERSTATE" />
+                <ScalarProperty Name="MOBILEPHONE" ColumnName="MOBILEPHONE" />
+                <ScalarProperty Name="TR" ColumnName="TR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_perf_stats_azure" FunctionName="Iso58Model.Store.sp_perf_stats_azure">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Iso58Model.sp_perf_stats_azure_Result">
+                <ScalarProperty Name="runtime" ColumnName="runtime" />
+                <ScalarProperty Name="session_id" ColumnName="session_id" />
+                <ScalarProperty Name="request_id" ColumnName="request_id" />
+                <ScalarProperty Name="ecid" ColumnName="ecid" />
+                <ScalarProperty Name="blocking_session_id" ColumnName="blocking_session_id" />
+                <ScalarProperty Name="blocking_ecid" ColumnName="blocking_ecid" />
+                <ScalarProperty Name="task_state" ColumnName="task_state" />
+                <ScalarProperty Name="wait_type" ColumnName="wait_type" />
+                <ScalarProperty Name="wait_duration_ms" ColumnName="wait_duration_ms" />
+                <ScalarProperty Name="wait_resource" ColumnName="wait_resource" />
+                <ScalarProperty Name="resource_description" ColumnName="resource_description" />
+                <ScalarProperty Name="last_wait_type" ColumnName="last_wait_type" />
+                <ScalarProperty Name="open_trans" ColumnName="open_trans" />
+                <ScalarProperty Name="transaction_isolation_level" ColumnName="transaction_isolation_level" />
+                <ScalarProperty Name="is_user_process" ColumnName="is_user_process" />
+                <ScalarProperty Name="request_cpu_time" ColumnName="request_cpu_time" />
+                <ScalarProperty Name="request_logical_reads" ColumnName="request_logical_reads" />
+                <ScalarProperty Name="request_reads" ColumnName="request_reads" />
+                <ScalarProperty Name="request_writes" ColumnName="request_writes" />
+                <ScalarProperty Name="memory_usage" ColumnName="memory_usage" />
+                <ScalarProperty Name="session_cpu_time" ColumnName="session_cpu_time" />
+                <ScalarProperty Name="session_reads" ColumnName="session_reads" />
+                <ScalarProperty Name="session_writes" ColumnName="session_writes" />
+                <ScalarProperty Name="session_logical_reads" ColumnName="session_logical_reads" />
+                <ScalarProperty Name="total_scheduled_time" ColumnName="total_scheduled_time" />
+                <ScalarProperty Name="total_elapsed_time" ColumnName="total_elapsed_time" />
+                <ScalarProperty Name="last_request_start_time" ColumnName="last_request_start_time" />
+                <ScalarProperty Name="last_request_end_time" ColumnName="last_request_end_time" />
+                <ScalarProperty Name="session_row_count" ColumnName="session_row_count" />
+                <ScalarProperty Name="prev_error" ColumnName="prev_error" />
+                <ScalarProperty Name="open_resultsets" ColumnName="open_resultsets" />
+                <ScalarProperty Name="request_total_elapsed_time" ColumnName="request_total_elapsed_time" />
+                <ScalarProperty Name="percent_complete" ColumnName="percent_complete" />
+                <ScalarProperty Name="est_completion_time" ColumnName="est_completion_time" />
+                <ScalarProperty Name="tran_name" ColumnName="tran_name" />
+                <ScalarProperty Name="transaction_begin_time" ColumnName="transaction_begin_time" />
+                <ScalarProperty Name="tran_type" ColumnName="tran_type" />
+                <ScalarProperty Name="tran_state" ColumnName="tran_state" />
+                <ScalarProperty Name="request_start_time" ColumnName="request_start_time" />
+                <ScalarProperty Name="request_status" ColumnName="request_status" />
+                <ScalarProperty Name="command" ColumnName="command" />
+                <ScalarProperty Name="statement_start_offset" ColumnName="statement_start_offset" />
+                <ScalarProperty Name="statement_end_offset" ColumnName="statement_end_offset" />
+                <ScalarProperty Name="database_id" ColumnName="database_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="executing_managed_code" ColumnName="executing_managed_code" />
+                <ScalarProperty Name="pending_io_count" ColumnName="pending_io_count" />
+                <ScalarProperty Name="login_time" ColumnName="login_time" />
+                <ScalarProperty Name="host_name" ColumnName="host_name" />
+                <ScalarProperty Name="program_name" ColumnName="program_name" />
+                <ScalarProperty Name="host_process_id" ColumnName="host_process_id" />
+                <ScalarProperty Name="client_version" ColumnName="client_version" />
+                <ScalarProperty Name="client_interface_name" ColumnName="client_interface_name" />
+                <ScalarProperty Name="login_name" ColumnName="login_name" />
+                <ScalarProperty Name="nt_domain" ColumnName="nt_domain" />
+                <ScalarProperty Name="nt_user_name" ColumnName="nt_user_name" />
+                <ScalarProperty Name="net_packet_size" ColumnName="net_packet_size" />
+                <ScalarProperty Name="client_net_address" ColumnName="client_net_address" />
+                <ScalarProperty Name="session_status" ColumnName="session_status" />
+                <ScalarProperty Name="scheduler_id" ColumnName="scheduler_id" />
+                <ScalarProperty Name="group_id" ColumnName="group_id" />
+                <ScalarProperty Name="context_info" ColumnName="context_info" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_perf_stats_azure_infrequent11" FunctionName="Iso58Model.Store.sp_perf_stats_azure_infrequent11">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Iso58Model.sp_perf_stats_azure_infrequent11_Result">
+                <ScalarProperty Name="runtime" ColumnName="runtime" />
+                <ScalarProperty Name="wait_type" ColumnName="wait_type" />
+                <ScalarProperty Name="waiting_tasks_count" ColumnName="waiting_tasks_count" />
+                <ScalarProperty Name="wait_time_ms" ColumnName="wait_time_ms" />
+                <ScalarProperty Name="max_wait_time_ms" ColumnName="max_wait_time_ms" />
+                <ScalarProperty Name="signal_wait_time_ms" ColumnName="signal_wait_time_ms" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="Iso58Model.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="SignBill" ColumnName="SignBill" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CustomerStatus" ColumnName="CustomerStatus" />
+                <ScalarProperty Name="OperationRemark" ColumnName="OperationRemark" />
+                <ScalarProperty Name="NuggetEndtime" ColumnName="NuggetEndtime" />
+                <ScalarProperty Name="NuggetStarttime" ColumnName="NuggetStarttime" />
+                <ScalarProperty Name="GuideEndtime" ColumnName="GuideEndtime" />
+                <ScalarProperty Name="GuideStarttime" ColumnName="GuideStarttime" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="ShopRemark" ColumnName="ShopRemark" />
+                <ScalarProperty Name="ShopMakeEndtime" ColumnName="ShopMakeEndtime" />
+                <ScalarProperty Name="ShopMakeStarttime" ColumnName="ShopMakeStarttime" />
+                <ScalarProperty Name="FollowUpPerson" ColumnName="FollowUpPerson" />
+                <ScalarProperty Name="ShopAddress" ColumnName="ShopAddress" />
+                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
+                <ScalarProperty Name="PauseEngine" ColumnName="PauseEngine" />
+                <ScalarProperty Name="OnlineEngine" ColumnName="OnlineEngine" />
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="CheckStatus" ColumnName="CheckStatus" />
+                <ScalarProperty Name="ContractModifyfee" ColumnName="ContractModifyfee" />
+                <ScalarProperty Name="ContractRealArrival" ColumnName="ContractRealArrival" />
+                <ScalarProperty Name="ContractMoney" ColumnName="ContractMoney" />
+                <ScalarProperty Name="ContractCode" ColumnName="ContractCode" />
+                <ScalarProperty Name="OrderRemark" ColumnName="OrderRemark" />
+                <ScalarProperty Name="BaiduAnswer" ColumnName="BaiduAnswer" />
+                <ScalarProperty Name="BaiduPwd" ColumnName="BaiduPwd" />
+                <ScalarProperty Name="BaiduAccount" ColumnName="BaiduAccount" />
+                <ScalarProperty Name="Idea" ColumnName="Idea" />
+                <ScalarProperty Name="TemplateCode" ColumnName="TemplateCode" />
+                <ScalarProperty Name="IDCode" ColumnName="IDCode" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="KeywordAttach" ColumnName="KeywordAttach" />
+                <ScalarProperty Name="Keyword" ColumnName="Keyword" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

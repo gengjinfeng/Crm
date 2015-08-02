@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ef670c0bc5c841089a1a884d3a15057d" Name="Diagram1">
+        <EntityTypeShape EntityType="Iso58Model.Customer" Width="1.5" PointX="8.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.DataDictionary" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.DataDictionaryItems" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Department" Width="1.5" PointX="3.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Factory" Width="1.5" PointX="1.5" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Function" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Log" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Menu" Width="1.5" PointX="1.5" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Permission" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.Role" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Iso58Model.User" Width="1.5" PointX="6" PointY="5.875" IsExpanded="true" />
+        <AssociationConnector Association="Iso58Model.FK_Customer_Dep" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_Customer_User" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_Department_Factory" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_User_Dep" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_Permission_Function" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_Permission_Menu" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_Permission_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="Iso58Model.FK_User_Role" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Iso58Model.Order" Width="1.5" PointX="10.875" PointY="5.875" />
+        <AssociationConnector Association="Iso58Model.FK_Order_ToCustomer" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

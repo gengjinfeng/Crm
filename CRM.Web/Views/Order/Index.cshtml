@@ -1,0 +1,31 @@
+﻿@using System.Web.UI.WebControls
+@model CRM.Repository.Person
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+@using (Html.BeginForm())
+{
+    <table id = "container" >
+    <tr >
+    <td class="label">@Html.LabelFor(m => m.Name):</td>
+    <td>@Html.EditorFor(m => m.Name)</td>
+        </tr>
+        <tr>
+            <td class="label">@Html.LabelFor(m => m.Gender):</td>
+            <td>@Html.RadioButtonListFor(m => m.Gender, "Gender")</td>
+        </tr>
+        <tr>
+            <td class="label">@Html.LabelFor(m => m.MaritalStatus):</td>
+            <td>@Html.RadioButtonListFor(m => m.MaritalStatus, "MaritalStatus")</td>
+        </tr>
+        <tr>
+            <td class="label">@Html.LabelFor(m => m.Country):</td>
+            <td>@Html.CheckBoxListFor(m => m.Country, "Country", RepeatDirection.Vertical)</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Save" /></td>
+        </tr>
+    </table>
+}
+                    

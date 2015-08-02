@@ -1,0 +1,264 @@
+﻿@model PagedList.IPagedList<CRM.Repository.Customer>
+@using PagedList.Mvc;
+@using CRM.Repository;
+@{
+    ViewBag.Title = "废弃池";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/jquery-2.0.2.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#checkall").click(function () {
+            var name = 'CustomerID';
+            if (this.checked) {
+                checkAll(name);
+            }
+            else {
+                clearAll(name);
+            }
+        });
+
+        function checkAll(name) {
+            var el = document.getElementsByTagName('input');
+            var len = el.length;
+            for (var i = 0; i < len; i++) {
+                if ((el[i].type == "checkbox") && (el[i].name == name)) {
+                    el[i].checked = true;
+                    //alert(el[i].value);
+                }
+            }
+        }
+        function clearAll(name) {
+            var el = document.getElementsByTagName('input');
+            var len = el.length;
+            for (var i = 0; i < len; i++) {
+                if ((el[i].type == "checkbox") && (el[i].name == name)) {
+                    el[i].checked = false;
+                }
+            }
+        }
+    });
+
+    function SingleMove(id, PoolStatus, OperationTitle) {
+        if (id == undefined || id.length == 0) {
+            art.dialog('信息提示：没有选择任何客户，请选择！');
+            return;
+        }
+        art.dialog.confirm('你确定要将该客户' + OperationTitle + '吗？', function () {
+            $.post('/Customer/Move', { Ids: id, PoolStatus: PoolStatus }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+        });
+
+
+    }
+
+    function Delete(id) {
+        art.dialog.confirm('你确定要删除该客户吗？', function () {
+            $.post('/Customer/Delete', { id: id }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+        });
+    }
+
+    function GetCustomerIds() {
+        var name = 'CustomerID';
+        var ids = '';
+        var el = document.getElementsByTagName('input');
+        var len = el.length;
+        for (var i = 0; i < len; i++) {
+            if ((el[i].type == "checkbox") && (el[i].name == name) && el[i].checked) {
+                if (ids == '') {
+                    ids = el[i].value;
+                }
+                else {
+                    ids = ids + ',' + el[i].value;
+                }
+            }
+        }
+        return ids;
+    }
+
+    function ShowDiag() {
+        //art.dialog('大家好,网址http://www.okbase.net');
+        var ids = GetCustomerIds();
+        if (ids == undefined || ids.length == 0) {
+            art.dialog('信息提示：没有选择任何要删除的客户，请选择！');
+            return;
+        }
+        
+        art.dialog.confirm('你确定要将所选客户进行批量删除吗？', function () {
+            $.post('/Customer/BatchDelete', { CustomerIds: ids}, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '批量操作成功！',
+                        ok: function () {
+                            //刷新父级页面
+                            var win = art.dialog.open.origin;
+                            win.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+    }
+</script>
+
+<p>
+    @using (Html.BeginForm("WastePool", "Customer", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div class="dataTables_filter">
+            <div class="form-group">
+                <label>
+                    公司名称: @Html.TextBox("CorporationName", ViewBag.CorporationNameParams as string, new { @class = "form-control" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    来源类型: @Html.DropDownList("fromType", ViewBag.SourceFrom as List<SelectListItem>, new { @class = "form-control" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    状态: @Html.DropDownList("Status", ViewBag.Status as List<SelectListItem>, new { @class = "form-control" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    电话: @Html.TextBox("TelePhone", ViewBag.TelePhoneParams as string, new { @class = "form-control" })
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    手机号: @Html.TextBox("MobilePhone", ViewBag.MobilePhoneParams as string, new { @class = "form-control" })
+                </label>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    查询
+                </button>
+            </div>
+        </div>
+    }
+</p>
+<div class="table-responsive">
+    @if (ViewBag.IsDirectorRole)
+    {
+        <strong style="font-size:16px;color:red;">全选:</strong><input type="checkbox" id="checkall" name="checkall" />
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                批量操作 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li><a href="javascript:;" onclick="ShowDiag();">删除</a></li>
+            </ul>
+        </div>
+    }
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            @if (ViewBag.IsDirectorRole)
+            {
+                <th>选择</th>
+            }
+            <th>
+                公司名称
+            </th>
+            <th>
+                状态
+            </th>
+            <th>
+                联系人
+            </th>
+            <th>
+                手机
+            </th>
+            <th>
+                客户来源
+            </th>
+            <th>
+                下次联系时间
+            </th>
+            <th>操作</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (ViewBag.IsDirectorRole)
+                {
+                    <td>
+                        @Html.CheckBox("CustomerID", new { value = item.CustomerID })
+                    </td>
+                }
+                <td style="word-wrap:break-word;word-break:break-all;" width="230">
+                    @Html.DisplayFor(modelItem => item.CorporationName)
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;" width="60">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;" width="120">
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;" width="120">
+                    @Html.DisplayFor(modelItem => item.MobileTel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SourseFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NextContactTime)
+                </td>
+                <td>
+                    @Html.ActionLink("查看", "Details", new { id = item.CustomerID }, new { @class = "btn btn-info", target = "_blank" })
+                    <a href="javascript:;" onclick="SingleMove('@item.CustomerID',1, '放入我的客户');" class="btn btn-danger">放入我的客户</a>
+                    @if (ViewBag.IsRole)
+                    {
+                        <a href="javascript:;" onclick="Delete(@item.CustomerID);" class="btn btn-danger">删除</a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    <strong style="color:red;font-size:16px;">客户总数：@Model.TotalItemCount</strong>，每页 @Model.PageSize 条记录，共 @Model.PageCount 页，当前第 @Model.PageNumber 页
+    @Html.PagedListPager(Model, page => Url.Action("WastePool", new { page = page, CorporationName = ViewBag.CorporationNameParams, fromType = ViewBag.fromTypeParams, Status = ViewBag.StatusParams, MobilePhone = ViewBag.MobilePhoneParams, TelePhone = ViewBag.TelePhoneParams }))
+</div>
