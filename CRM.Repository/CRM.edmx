@@ -192,6 +192,8 @@
           <Property Name="CustomerId" Type="bigint" Nullable="false" />
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="SignBill" Type="nchar" MaxLength="10" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModifyTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -862,6 +864,8 @@
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="Iso58Model.FK_Order_ToCustomer" FromRole="Order" ToRole="Customer" />
           <Property Name="SignBill" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModifyTime" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_Order_ToCustomer">
           <End Type="Iso58Model.Customer" Role="Customer" Multiplicity="1" />
@@ -1156,6 +1160,8 @@
           <EntitySetMapping Name="Order">
             <EntityTypeMapping TypeName="Iso58Model.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="LastModifyTime" ColumnName="LastModifyTime" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="SignBill" ColumnName="SignBill" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />

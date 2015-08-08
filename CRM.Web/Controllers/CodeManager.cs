@@ -23,14 +23,14 @@ namespace CRM.Web.Controllers
     {
         private static CodeDescription[] codes = new CodeDescription[]
         {
-            new CodeDescription("M","Male","Gender"),
-            new CodeDescription("F","Female","Gender"),
-            new CodeDescription("S","Single","MaritalStatus"),
-            new CodeDescription("M","Married","MaritalStatus"),
-            new CodeDescription("CN","China","Country"),
-            new CodeDescription("US","Unite States","Country"),
-            new CodeDescription("UK","Britain","Country"),
-            new CodeDescription("SG","Singapore","Country"),
+            //new CodeDescription("M","Male","Gender"),
+            //new CodeDescription("F","Female","Gender"),
+            //new CodeDescription("S","Single","MaritalStatus"),
+            //new CodeDescription("M","Married","MaritalStatus"),
+            //new CodeDescription("CN","China","Country"),
+            //new CodeDescription("US","Unite States","Country"),
+            //new CodeDescription("UK","Britain","Country"),
+            //new CodeDescription("SG","Singapore","Country"),
 
             new CodeDescription("新签","新签","CustomerStatus"),
             new CodeDescription("续签","续签","CustomerStatus"),

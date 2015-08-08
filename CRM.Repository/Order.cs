@@ -50,6 +50,8 @@ namespace CRM.Repository
         public long CustomerId { get; set; }
         public long UserId { get; set; }
         public string SignBill { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModifyTime { get; set; }
     
         public virtual Customer Customer { get; set; }
     }

@@ -15,10 +15,6 @@ namespace CRM.Web.Controllers
     {
         public ActionResult Index()
         {
-            //User user = GetCurrentUser();
-            //ViewBag.CurrentUser = user.USERNAME;
-            //string CurrentUserRole = user.Role.ROLENAME;
-            //ViewBag.IsDirector = ((CurrentUserRole == "销售总监") || (CurrentUserRole == "高级管理员"));
             return View();
         }
 
@@ -163,11 +159,6 @@ namespace CRM.Web.Controllers
             return Json(new { success = true });
         }
 
-        public ActionResult Contact()
-        {
-            return View();
-        }
-
         private SelectList GetStatusList(object selectedValue)
         {
             List<string> lst = new List<string>()
@@ -223,26 +214,6 @@ namespace CRM.Web.Controllers
             return items;
         }
 
-        private IEnumerable<Department> GetMyDepartmentList()
-        {
-            IEnumerable<Department> items = db.Department;
-            User currentUser = GetCurrentUser();
-            if (currentUser.Role.ROLENAME == "销售经理")
-            {
-                //仅能看部门内数据
-                items = db.Department.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
-            }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-            {
-                //全部数据
-            }
-            else
-            {
-                //仅能看自己数据
-                items = items.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
-            }
-            return items;
-        }
 
         public bool IsRole
         {
@@ -263,6 +234,12 @@ namespace CRM.Web.Controllers
                     return false;
                 }
             }
+        }
+
+        public ActionResult Error(string error="")
+        {
+            ViewBag.Message = error;
+            return View();
         }
     }
 }

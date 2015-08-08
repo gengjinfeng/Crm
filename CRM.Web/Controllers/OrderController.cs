@@ -27,6 +27,8 @@ namespace CRM.Web.Controllers
         [HttpPost]
         public ActionResult Create(Order order)
         {
+            db.Order.Add(order);
+            db.SaveChanges();
             return Create();
         }
 
@@ -59,37 +61,77 @@ namespace CRM.Web.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string CorporationName,string DepartmentId, string Owner, string TelePhone, string MobilePhone, string StartTime, string EndTime, int? page)
         {
-            
-            return View(new Person { Name = "Foo", Gender = "F", MaritalStatus = "M", Country = new string[] { "CN", "US","UK" } });
-        }
 
-        [HttpPost]
-        public ActionResult Index(Person person)
-        {
-            return View();
-        }
+            IEnumerable<Department> _Departments = GetMyDepartmentList();
+            SelectList Departments = new SelectList(_Departments, "DEPARTMENTID", "DEPARTMENTNAME", DepartmentId);
+            var DepartmentList = Departments.ToList();
+            if (_Departments.Count() > 1)
+            {
+                DepartmentList.Insert(0, new SelectListItem() { Text = "全部", Value = "0" });
+            }
+            ViewBag.Department = DepartmentList;
 
-        private IEnumerable<User> GetMyUser()
-        {
-            IEnumerable<User> items = db.User;
-            User currentUser = GetCurrentUser();
-            if (currentUser.Role.ROLENAME == "销售经理")
+            IEnumerable<User> _Users = GetMyUser(DepartmentId);
+            SelectList Users = new SelectList(_Users, "USERID", "USERNAME", Owner);
+            var usersList = Users.ToList();
+            if (_Users.Count() > 1)
             {
-                //仅能看部门内数据
-                items = db.User.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
+                usersList.Insert(0, new SelectListItem() { Text = "全部", Value = "0" });
             }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+            ViewBag.Owner = usersList;
+
+            ViewBag.CorporationNameParams = CorporationName;
+            ViewBag.DepartmentIdParams = DepartmentId;
+            ViewBag.UserIdParams = Owner;
+            ViewBag.TelePhoneParams = TelePhone;
+            ViewBag.MobilePhoneParams = MobilePhone;
+
+            ViewBag.StartTimeParams = StartTime;
+            ViewBag.EndTimeParams = EndTime;
+
+            var orders = from item in db.Order
+                         select item;
+            if (!string.IsNullOrEmpty(CorporationName))
             {
-                //ALL
+                orders = orders.Where(x => x.Customer.CorporationName.Contains(CorporationName));
             }
-            else
+            if (!string.IsNullOrEmpty(TelePhone))
             {
-                //仅能看自己数据
-                items = items.Where(y => y.USERID == currentUser.USERID);
+                orders = orders.Where(x => x.Customer.Tel.Contains(TelePhone));
             }
-            return items;
+            if (!string.IsNullOrEmpty(MobilePhone))
+            {
+                orders = orders.Where(x => x.Customer.MobileTel.Contains(MobilePhone));
+            }
+
+            long depId = Convert.ToInt64(DepartmentId);
+            if (depId > 0)
+            {
+                orders = orders.Where(c => c.Customer.DepartmentID == depId);
+            }
+            if (Owner == null)
+            {
+                long id = GetCurrentUser().USERID;
+                orders = orders.Where(x => x.UserId == id);
+            }
+            if (Owner != null && Owner != "0")
+            {
+                long userId = Convert.ToInt64(Owner);
+                orders = orders.Where(x => x.UserId == userId);
+            }
+            if (!string.IsNullOrEmpty(StartTime) && !string.IsNullOrEmpty(EndTime))
+            {
+                DateTime st = DateTime.Parse(DateTime.Parse(StartTime).ToString("yyyy-MM-dd 00:00:00"));
+                DateTime et = DateTime.Parse(DateTime.Parse(EndTime).ToString("yyyy-MM-dd 23:59:59"));
+                orders = orders.Where(x => x.CreateDate.Value >= st && x.CreateDate <= et);
+            }
+
+            orders = orders.OrderByDescending(c => c.CreateDate);
+            int pageNumber = (page ?? 1);
+            return View(orders.ToPagedList(pageNumber, pageSize));
+            //return View(new Person { Name = "Foo", Gender = "F", MaritalStatus = "M", Country = new string[] { "CN", "US","UK" } });
         }
     } 
 }

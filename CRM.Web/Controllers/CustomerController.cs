@@ -957,61 +957,7 @@ namespace CRM.Web.Controllers
             }
             return items.AsQueryable();
         }
-
-        private void InitPageSize()
-        {
-            HttpCookie cookie = HttpContext.Request.Cookies["PageSize"];
-            if (cookie != null)
-            {
-                pageSize = Convert.ToInt32(cookie.Value);
-            }
-        }
-        private IEnumerable<User> GetMyUser(string departmentId="0")
-        {
-            IEnumerable<User> items = db.User;
-            User currentUser = GetCurrentUser();
-            if (currentUser.Role.ROLENAME == "销售经理")
-            {
-                //仅能看部门内数据
-                items = db.User.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
-            }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-            {
-                long depId = Convert.ToInt64(departmentId);
-                if(depId>0)
-                {
-                    items = db.User.Where(y => y.DEPARTMENTID == depId);
-                }
-            }
-            else
-            {
-                //仅能看自己数据
-                items = items.Where(y => y.USERID == currentUser.USERID);
-            }
-            return items;
-        }
-
-        private IEnumerable<Department> GetMyDepartmentList()
-        {
-            IEnumerable<Department> items = db.Department;
-            User currentUser = GetCurrentUser();
-            if (currentUser.Role.ROLENAME == "销售经理")
-            {
-                //仅能看部门内数据
-                items = db.Department.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
-            }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-            {
-                //全部数据
-            }
-            else
-            {
-                //仅能看自己数据
-                items = items.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
-            }
-            return items;
-        }
-
+        
         [HttpGet]
         public JsonResult GetEmployees(long departmentId)
         {
