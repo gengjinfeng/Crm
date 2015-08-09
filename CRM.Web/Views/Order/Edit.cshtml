@@ -1,57 +1,61 @@
 ﻿@{
-    ViewBag.Title = "创建订单";
+    ViewBag.Title = "编辑订单";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @using System.Web.UI.WebControls
 @model CRM.Repository.Order
-<link href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" />
-<link href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.theme.css" rel="stylesheet" />
-<form class="form-inline" action="@Url.Action("Create", "Order")" method="post">
+<form class="form-inline" action="@Url.Action("Edit", "Order")" method="post">
     <div class="panel panel-primary">
         <div class="panel-heading">提单人员填写</div>
         <div class="panel-body">
             <div class="alert alert-success" role="alert">客户基本信息</div>
             <div class="form-group">
                 <label>
-                    提单人员: @Html.DropDownList("UserId", ViewBag.UserId as List<SelectListItem>, new { @class = "form-control" })
+                    提单人员: 
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @readonly = true })
                 </label>
             </div>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.CreateDate)
+            @Html.HiddenFor(m=>m.CustomerId)
+            @Html.HiddenFor(m=>m.Customer.CustomerID)
             <div class="form-group">
                 <label for="exampleInputName2">公司名称(*)</label>
-                <input type="text" id="CorporationName" name="CorporationName" class="form-control" placeholder="输入公司名称，自动匹配喔" />
+                @Html.TextBoxFor(x => x.Customer.CorporationName, new { @class = "form-control", @readonly = true })
             </div>
             <br />
             <div class="form-group">
                 <label for="exampleInputName2">客户联系人</label>
-                <input type="text" class="form-control" id="CustomerName" readonly/>
+                @Html.TextBoxFor(x => x.Customer.CustomerName, new { @class = "form-control", @readonly = true})
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">客户联系电话</label>
-                <input type="text" class="form-control" id="Tel" readonly/>
+                @Html.TextBoxFor(x => x.Customer.Tel, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">手机</label>
-                <input type="text" class="form-control" id="MobileTel" readonly />
+                @Html.TextBoxFor(x => x.Customer.MobileTel, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">传真</label>
-                <input type="text" class="form-control" id="Fax" readonly/>
+                @Html.TextBoxFor(x => x.Customer.Fax, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">客户邮箱</label>
-                <input type="text" class="form-control" id="Email" readonly/>
+                @Html.TextBoxFor(x => x.Customer.Email, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">省份</label>
-                <input type="text" class="form-control" id="Province" readonly/>
+                @Html.TextBoxFor(x => x.Customer.Province, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">城市</label>
-                <input type="text" class="form-control" id="City" readonly/>
+                @Html.TextBoxFor(x => x.Customer.City, new { @class = "form-control", @readonly = true })
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">行业</label>
-                <input type="text" class="form-control" id="Industry" readonly/>
+                @Html.TextBoxFor(x => x.Customer.Industry, new { @class = "form-control", @readonly = true })
             </div>
             <p></p>
             <div class="alert alert-success" role="alert">订单信息</div>
@@ -155,6 +159,7 @@
                 <label for="exampleInputName2">审核</label>
                 @Html.RadioButtonListFor(m => m.CheckStatus, "CheckStatus")
             </div>
+            
             <br />
             <div class="form-group">
                 <label for="exampleInputName2">开通引擎</label>
@@ -238,47 +243,13 @@
     <p></p>
     <button type="submit" class="btn btn-info">保存</button>
 </form>
-
-<script src="~/Scripts/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
-<script src="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
-
-@*<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">*@
-@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
-<script type="text/javascript">
-    $("#cwLink").click();
-    $("#kfLink").click();
-    $("#editorLink").click();
-    $("#ywLink").click();
-    function slideToggle(panel) {
-        $('#' + panel).slideToggle(500);//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
-    }
-
-    var userId = $("#UserId").val();
-    $(function () {
-        $("#UserId").change(function () {
-            userId = $("#UserId").val();
-        });
-    });
-
-    $("input#CorporationName").autocomplete({
-        source: function (request, response)
-        {
-            var url = "/Order/CorporationAutoComplete"; 
-            $.getJSON(url,{UserId:$("#UserId").val(),term:request.term},response);
-        },
-        minLength: 0,
-        select: function (event, ui) {
-            $("#CustomerId").val(ui.item.id);
-            $("#CustomerName").val(ui.item.CustomerName);
-            $("#Tel").val(ui.item.Tel);
-            $("#Fax").val(ui.item.Fax);
-            $("#Email").val(ui.item.Email);
-            $("#Province").val(ui.item.Province);
-            $("#City").val(ui.item.City);
-            $("#Industry").val(ui.item.Industry);
-            $("#MobileTel").val(ui.item.MobileTel);
-        }
-    });
-</script>
-
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+            $("#cwLink").click();
+            $("#kfLink").click();
+            $("#editorLink").click();
+            $("#ywLink").click();
+            function slideToggle(panel) {
+                $('#' + panel).slideToggle(500);//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
+            }
+    </script>

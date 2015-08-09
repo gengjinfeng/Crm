@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderExtend.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>CRM.tt</DependentUpon>
     </Compile>

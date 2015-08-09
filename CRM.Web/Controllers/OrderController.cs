@@ -21,15 +21,40 @@ namespace CRM.Web.Controllers
             SelectList Users = new SelectList(_Users, "USERID", "USERNAME",user.USERID);
             var usersList = Users.ToList();
             ViewBag.UserId = usersList;
-            return View();
+            return View(new Order { CustomerStatus= "新签", Idea= "自选", CheckStatus= "未审核", Product= "仅百度", ShopStatus= "未跟进", OrderStatus= "开通" });
         }
 
         [HttpPost]
         public ActionResult Create(Order order)
         {
+            order.CreateDate = DateTime.Now;
+            order.LastModifyTime = DateTime.Now;
             db.Order.Add(order);
             db.SaveChanges();
             return Create();
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            Order model = db.Order.Where(o => o.Id == id).SingleOrDefault();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Order order)
+        {
+            try
+            {
+                order.LastModifyTime = DateTime.Now;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return Content(string.Format("<script >alert('编辑失败，错误信息:{0}');window.history.go( -1 );</script >", ex.Message), "text/html");
+            }
+            return Content("<script >alert('编辑成功！');window.history.go( -1 );</script >", "text/html");
         }
 
         public ActionResult CorporationAutoComplete(long UserId,string term)
@@ -132,6 +157,13 @@ namespace CRM.Web.Controllers
             int pageNumber = (page ?? 1);
             return View(orders.ToPagedList(pageNumber, pageSize));
             //return View(new Person { Name = "Foo", Gender = "F", MaritalStatus = "M", Country = new string[] { "CN", "US","UK" } });
+        }
+
+        [HttpGet]
+        public ActionResult Details(int id)
+        {
+            Order model = db.Order.Where(o => o.Id == id).SingleOrDefault();
+            return View(model);
         }
     } 
 }

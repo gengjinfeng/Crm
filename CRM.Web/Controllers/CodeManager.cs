@@ -59,9 +59,6 @@ namespace CRM.Web.Controllers
             new CodeDescription("暂停","暂停","OrderStatus"),
             new CodeDescription("结束","结束","OrderStatus"),
             new CodeDescription("退款","退款","OrderStatus")
-            
-
-
         };
         public static Collection<CodeDescription> GetCodes(string category)
         {

@@ -65,7 +65,7 @@ namespace System.Web.Mvc.Html
                     else
                     {
                         string currentValue = stateValue as string;
-                        isChecked = (null != currentValue && code.Code == currentValue);
+                        isChecked = (null != currentValue && code.Code == currentValue.Trim());
                     }
 
                     td.InnerHtml = GenerateRadioHtml(name, id, code.Description, code.Code, isChecked, type);
@@ -91,7 +91,7 @@ namespace System.Web.Mvc.Html
                     else
                     {
                         string currentValue = stateValue as string;
-                        isChecked = (null != currentValue && code.Code == currentValue);
+                        isChecked = (null != currentValue && code.Code == currentValue.Trim());
                     }
 
                     td.InnerHtml = GenerateRadioHtml(name, id, code.Description, code.Code, isChecked, type);
