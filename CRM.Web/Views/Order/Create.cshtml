@@ -40,22 +40,39 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">客户邮箱</label>
-                <input type="text" class="form-control" id="Email" readonly/>
+                <input type="text" class="form-control" id="Email"/>
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">省份</label>
-                <input type="text" class="form-control" id="Province" readonly/>
+                <input type="text" class="form-control" id="Province"/>
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">城市</label>
-                <input type="text" class="form-control" id="City" readonly/>
+                <input type="text" class="form-control" id="City"/>
             </div>
             <div class="form-group">
                 <label for="exampleInputName2">行业</label>
-                <input type="text" class="form-control" id="Industry" readonly/>
+                <input type="text" class="form-control" id="Industry"/>
             </div>
             <p></p>
             <div class="alert alert-success" role="alert">订单信息</div>
+            <div class="form-group">
+                <label for="exampleInputName2">签单客户联系人</label>
+                <input type="text" class="form-control" id="CustomerName" />
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">电话</label>
+                <input type="text" class="form-control" id="Tel" />
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">手机</label>
+                <input type="text" class="form-control" id="MobileTel" />
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">传真</label>
+                <input type="text" class="form-control" id="Fax" />
+            </div>
+            <br />
             <div class="form-group">
                 <label for="exampleInputName2">客户状态</label>
                 @Html.RadioButtonListFor(m => m.CustomerStatus, "CustomerStatus")
@@ -63,7 +80,7 @@
             <br />
             <div class="form-group">
                 <label for="exampleInputName2">产品属性 </label>
-                @Html.RadioButtonListFor(m => m.Product, "Product", RepeatDirection.Horizontal)
+                @Html.CheckBoxListFor(m => m.Product, "Product", RepeatDirection.Horizontal)
             </div>
             <br />
             <div class="form-group">
@@ -131,21 +148,22 @@
                 <label for="exampleInputName2">合同编号</label>
                 @Html.TextBoxFor(x => x.ContractCode, new { @class = "form-control", @placeholder = "合同编号" })
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label for="exampleInputName2">认款</label>
                 @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "认款" })
+            </div>*@
+            <div class="form-group">
+                <label for="exampleInputName2">合同金额</label>
+                @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "合同金额" })
             </div>
             <div class="form-group">
-                <label for="exampleInputName2">到款金额</label>
-                @Html.TextBoxFor(x => x.ContractRealArrival, new { @class = "form-control", @placeholder = "到款金额" })
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail2">修改费用</label>
-                @Html.TextBoxFor(x => x.ContractModifyfee, new { @class = "form-control", @placeholder = "修改费用" })
+                <label for="exampleInputEmail2">算入业绩金额</label>
+                @Html.TextBoxFor(x => x.SalesPerformance, new { @class = "form-control", @placeholder = "算入业绩金额" })
             </div>
         </div>
     </div>
-    <div class="panel panel-info">
+
+    @*<div class="panel panel-info">
         <div class="panel-heading">
             <strong style="font-size:14px;">客服人员填写</strong>
             <a id="kfLink" href="javascript:;" onclick="slideToggle('kfpanel')" style=" float:right; color:green"><strong>折叠起来</strong></a>
@@ -166,7 +184,7 @@
                 @Html.TextBoxFor(x => x.PauseEngine, new { @class = "form-control", @placeholder = "暂停引擎" })
             </div>
         </div>
-    </div>
+    </div>*@
     <div class="panel panel-warning">
         <div class="panel-heading">
         <strong style="font-size:14px;">编辑人员填写</strong>
@@ -230,6 +248,50 @@
                 @Html.TextBoxFor(x => x.NuggetEndtime, new { @class = "form-control", @placeholder = "掘金结束时间", onfocus = "date()" })
             </div>
             <br />
+            <div class="form-group">
+                <label for="exampleInputName2">百度上线时间</label>
+                @Html.TextBoxFor(x => x.BaiduStarttime, new { @class = "form-control", @placeholder = "百度上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">百度结束时间</label>
+                @Html.TextBoxFor(x => x.BaiduEndtime, new { @class = "form-control", @placeholder = "百度结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">360上线时间</label>
+                @Html.TextBoxFor(x => x.Qihu360OpenStarttime, new { @class = "form-control", @placeholder = "360上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">360结束时间</label>
+                @Html.TextBoxFor(x => x.Qihu360OpenEndtime, new { @class = "form-control", @placeholder = "360结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">搜搜上线时间</label>
+                @Html.TextBoxFor(x => x.SosoOpenStarttime, new { @class = "form-control", @placeholder = "搜搜上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">搜搜结束时间</label>
+                @Html.TextBoxFor(x => x.SosoOpenEndtime, new { @class = "form-control", @placeholder = "搜搜结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">搜狗上线时间</label>
+                @Html.TextBoxFor(x => x.SougouOpenStarttime, new { @class = "form-control", @placeholder = "搜狗上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">搜狗结束时间</label>
+                @Html.TextBoxFor(x => x.SougouOpenEndtime, new { @class = "form-control", @placeholder = "搜狗结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">有道上线时间</label>
+                @Html.TextBoxFor(x => x.YoudaoOpenStarttime, new { @class = "form-control", @placeholder = "有道上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">有道结束时间</label>
+                @Html.TextBoxFor(x => x.YoudaoOpenEndtime, new { @class = "form-control", @placeholder = "有道结束时间", onfocus = "date()" })
+            </div>
             <div class="form-group">
                 <label for="exampleInputName2">备注</label>
                 @Html.TextAreaFor(x => x.OperationRemark, new { @class = "form-control", rows = 5, cols = 300 })

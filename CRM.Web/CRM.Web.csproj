@@ -29,7 +29,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>12.0</OldToolsVersion>
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -222,8 +222,10 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\CrmOnline - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\CrmOnline - FTP %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\CrmOnline - Web Deploy %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Images\wxLogo.png" />
@@ -447,13 +449,13 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\jquery.autocomplete.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CRM.Repository\CRM.Repository.csproj">
       <Project>{7006ec93-1ad5-405e-ae9f-c540e8ee5146}</Project>
       <Name>CRM.Repository</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\jquery.autocomplete.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

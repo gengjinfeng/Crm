@@ -693,6 +693,69 @@ namespace CRM.Web.Controllers
             return Json(new { success = true });
         }
 
+        public ActionResult ClearInfo(string Ids)
+        {
+            try
+            {
+                string[] ids = Ids.Split(new char[] { ',' });
+                foreach (var id in ids)
+                {
+                    long cid = Convert.ToInt64(id);
+                    Customer model = db.Customer.Where(c => c.CustomerID == cid).SingleOrDefault();
+                    model.FirstContactDate = null;
+                    model.FirstRemark = null;
+                    model.SecondContactDate = null;
+                    model.SecondRemark = null;
+                    model.ThirdContactDate = null;
+                    model.ThirdRemark = null;
+                    model.FourthContactDate = null;
+                    model.FourthRemark = null;
+                    model.FifthContactDate = null;
+                    model.FifthRemark = null;
+                    model.SixthContactDate = null;
+                    model.SixthRemark = null;
+                    model.SeventhContactDate = null;
+                    model.SeventhRemark = null;
+                    model.EighthContactDate = null;
+                    model.EighthRemark = null;
+                    model.NinthContactDate = null;
+                    model.NinthRemark = null;
+                    model.TenthContactDate = null;
+                    model.TenthRemark = null;
+
+                    model.ElevenContactDate = null;
+                    model.ElevenRemark = null;
+                    model.twelveContactDate = null;
+                    model.twelveRemark = null;
+                    model.thirteenContactDate = null;
+                    model.thirteenRemark = null;
+                    model.fourteenContactDate = null;
+                    model.fourteenRemark = null;
+                    model.fifteenContactDate = null;
+                    model.fifteenRemark = null;
+                    model.sixteenContactDate = null;
+                    model.sixteenRemark = null;
+                    model.seventeenContactDate = null;
+                    model.seventeenRemark = null;
+                    model.eighteenContactDate = null;
+                    model.eighteenRemark = null;
+                    model.nineteenContactDate = null;
+                    model.nineteenRemark = null;
+                    model.twentyContactDate = null;
+                    model.twentyRemark = null;
+
+                    model.LastModify = DateTime.Now;
+                    db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "操作失败：" + ex.Message });
+            }
+            return Json(new { success = true });
+        }
+
         public bool IsRole
         {
             get

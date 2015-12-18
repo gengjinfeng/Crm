@@ -28,12 +28,7 @@ namespace CRM.Repository
         public string OrderRemark { get; set; }
         public string ContractCode { get; set; }
         public string ContractMoney { get; set; }
-        public string ContractRealArrival { get; set; }
-        public string ContractModifyfee { get; set; }
-        public string CheckStatus { get; set; }
         public string Product { get; set; }
-        public string OnlineEngine { get; set; }
-        public string PauseEngine { get; set; }
         public string ShopStatus { get; set; }
         public string ShopAddress { get; set; }
         public string FollowUpPerson { get; set; }
@@ -52,6 +47,23 @@ namespace CRM.Repository
         public string SignBill { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModifyTime { get; set; }
+        public string SalesPerformance { get; set; }
+        public Nullable<System.DateTime> BaiduStarttime { get; set; }
+        public Nullable<System.DateTime> BaiduEndtime { get; set; }
+        public Nullable<System.DateTime> BaiduOpenStarttime { get; set; }
+        public Nullable<System.DateTime> BaiduOpenEndtime { get; set; }
+        public Nullable<System.DateTime> Qihu360OpenStarttime { get; set; }
+        public Nullable<System.DateTime> Qihu360OpenEndtime { get; set; }
+        public Nullable<System.DateTime> SosoOpenStarttime { get; set; }
+        public Nullable<System.DateTime> SosoOpenEndtime { get; set; }
+        public Nullable<System.DateTime> SougouOpenStarttime { get; set; }
+        public Nullable<System.DateTime> SougouOpenEndtime { get; set; }
+        public Nullable<System.DateTime> YoudaoOpenStarttime { get; set; }
+        public Nullable<System.DateTime> YoudaoOpenEndtime { get; set; }
+        public string OrderLinktor { get; set; }
+        public string OrderTelePhone { get; set; }
+        public string OrderMobilePhone { get; set; }
+        public string OrderFax { get; set; }
     
         public virtual Customer Customer { get; set; }
     }

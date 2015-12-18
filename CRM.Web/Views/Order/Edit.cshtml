@@ -134,21 +134,21 @@
                 <label for="exampleInputName2">合同编号</label>
                 @Html.TextBoxFor(x => x.ContractCode, new { @class = "form-control", @placeholder = "合同编号" })
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label for="exampleInputName2">认款</label>
                 @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "认款" })
+            </div>*@
+            <div class="form-group">
+                <label for="exampleInputName2">合同金额</label>
+                @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "到款金额" })
             </div>
             <div class="form-group">
-                <label for="exampleInputName2">到款金额</label>
-                @Html.TextBoxFor(x => x.ContractRealArrival, new { @class = "form-control", @placeholder = "到款金额" })
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail2">修改费用</label>
-                @Html.TextBoxFor(x => x.ContractModifyfee, new { @class = "form-control", @placeholder = "修改费用" })
+                <label for="exampleInputEmail2">算入业绩金额</label>
+                @Html.TextBoxFor(x => x.SalesPerformance, new { @class = "form-control", @placeholder = "修改费用" })
             </div>
         </div>
     </div>
-    <div class="panel panel-info">
+    @*<div class="panel panel-info">
         <div class="panel-heading">
             <strong style="font-size:14px;">客服人员填写</strong>
             <a id="kfLink" href="javascript:;" onclick="slideToggle('kfpanel')" style=" float:right; color:green"><strong>折叠起来</strong></a>
@@ -170,7 +170,7 @@
                 @Html.TextBoxFor(x => x.PauseEngine, new { @class = "form-control", @placeholder = "暂停引擎" })
             </div>
         </div>
-    </div>
+    </div>*@
     <div class="panel panel-warning">
         <div class="panel-heading">
         <strong style="font-size:14px;">编辑人员填写</strong>

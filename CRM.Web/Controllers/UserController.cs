@@ -13,6 +13,7 @@ namespace CRM.Web.Controllers
         public ActionResult Index(string userName)
         {
             var items = from u in db.User
+                        where u.USERSTATE.Value
                         select u;
             if (!string.IsNullOrEmpty(userName))
             {

@@ -49,6 +49,12 @@ namespace CRM.Web.Controllers
             new CodeDescription("锦囊","锦囊","Product"),
             new CodeDescription("仅百度","仅百度","Product"),
 
+            new CodeDescription("百度开户","百度开户","Product"),
+            new CodeDescription("360开户","360开户","Product"),
+            new CodeDescription("搜搜开户","搜搜开户","Product"),
+            new CodeDescription("搜狗开户","搜狗开户","Product"),
+            new CodeDescription("有道开户","有道开户","Product"),
+
             new CodeDescription("未跟进","未跟进","ShopStatus"),
             new CodeDescription("收集材料","收集材料","ShopStatus"),
             new CodeDescription("制作中","制作中","ShopStatus"),

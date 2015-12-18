@@ -170,12 +170,8 @@
           <Property Name="OrderRemark" Type="nvarchar" MaxLength="3000" />
           <Property Name="ContractCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ContractMoney" Type="nvarchar" MaxLength="50" />
-          <Property Name="ContractRealArrival" Type="nvarchar" MaxLength="50" />
-          <Property Name="ContractModifyfee" Type="nvarchar" MaxLength="50" />
-          <Property Name="CheckStatus" Type="nchar" MaxLength="10" />
+          <Property Name="SalesPerformance" Type="nvarchar" MaxLength="50" />
           <Property Name="Product" Type="nvarchar" MaxLength="50" />
-          <Property Name="OnlineEngine" Type="nvarchar" MaxLength="50" />
-          <Property Name="PauseEngine" Type="nvarchar" MaxLength="50" />
           <Property Name="ShopStatus" Type="nchar" MaxLength="10" />
           <Property Name="ShopAddress" Type="nvarchar" MaxLength="50" />
           <Property Name="FollowUpPerson" Type="ntext" />
@@ -194,6 +190,22 @@
           <Property Name="SignBill" Type="nchar" MaxLength="10" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModifyTime" Type="datetime" />
+          <Property Name="BaiduStarttime" Type="datetime" />
+          <Property Name="BaiduEndtime" Type="datetime" />
+          <Property Name="BaiduOpenStarttime" Type="datetime" />
+          <Property Name="BaiduOpenEndtime" Type="datetime" />
+          <Property Name="Qihu360OpenStarttime" Type="datetime" />
+          <Property Name="Qihu360OpenEndtime" Type="datetime" />
+          <Property Name="SosoOpenStarttime" Type="datetime" />
+          <Property Name="SosoOpenEndtime" Type="datetime" />
+          <Property Name="SougouOpenStarttime" Type="datetime" />
+          <Property Name="SougouOpenEndtime" Type="datetime" />
+          <Property Name="YoudaoOpenStarttime" Type="datetime" />
+          <Property Name="YoudaoOpenEndtime" Type="datetime" />
+          <Property Name="OrderLinktor" Type="varchar" MaxLength="50" />
+          <Property Name="OrderTelePhone" Type="varchar" MaxLength="50" />
+          <Property Name="OrderMobilePhone" Type="varchar" MaxLength="50" />
+          <Property Name="OrderFax" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -841,12 +853,7 @@
           <Property Name="OrderRemark" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
           <Property Name="ContractCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContractMoney" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContractRealArrival" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContractModifyfee" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CheckStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="Product" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OnlineEngine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PauseEngine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShopStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="ShopAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FollowUpPerson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -866,6 +873,23 @@
           <Property Name="SignBill" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModifyTime" Type="DateTime" Precision="3" />
+          <Property Name="SalesPerformance" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaiduStarttime" Type="DateTime" Precision="3" />
+          <Property Name="BaiduEndtime" Type="DateTime" Precision="3" />
+          <Property Name="BaiduOpenStarttime" Type="DateTime" Precision="3" />
+          <Property Name="BaiduOpenEndtime" Type="DateTime" Precision="3" />
+          <Property Name="Qihu360OpenStarttime" Type="DateTime" Precision="3" />
+          <Property Name="Qihu360OpenEndtime" Type="DateTime" Precision="3" />
+          <Property Name="SosoOpenStarttime" Type="DateTime" Precision="3" />
+          <Property Name="SosoOpenEndtime" Type="DateTime" Precision="3" />
+          <Property Name="SougouOpenStarttime" Type="DateTime" Precision="3" />
+          <Property Name="SougouOpenEndtime" Type="DateTime" Precision="3" />
+          <Property Name="YoudaoOpenStarttime" Type="DateTime" Precision="3" />
+          <Property Name="YoudaoOpenEndtime" Type="DateTime" Precision="3" />
+          <Property Name="OrderLinktor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderTelePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderMobilePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderFax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Order_ToCustomer">
           <End Type="Iso58Model.Customer" Role="Customer" Multiplicity="1" />
@@ -1160,6 +1184,23 @@
           <EntitySetMapping Name="Order">
             <EntityTypeMapping TypeName="Iso58Model.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderFax" ColumnName="OrderFax" />
+                <ScalarProperty Name="OrderMobilePhone" ColumnName="OrderMobilePhone" />
+                <ScalarProperty Name="OrderTelePhone" ColumnName="OrderTelePhone" />
+                <ScalarProperty Name="OrderLinktor" ColumnName="OrderLinktor" />
+                <ScalarProperty Name="YoudaoOpenEndtime" ColumnName="YoudaoOpenEndtime" />
+                <ScalarProperty Name="YoudaoOpenStarttime" ColumnName="YoudaoOpenStarttime" />
+                <ScalarProperty Name="SougouOpenEndtime" ColumnName="SougouOpenEndtime" />
+                <ScalarProperty Name="SougouOpenStarttime" ColumnName="SougouOpenStarttime" />
+                <ScalarProperty Name="SosoOpenEndtime" ColumnName="SosoOpenEndtime" />
+                <ScalarProperty Name="SosoOpenStarttime" ColumnName="SosoOpenStarttime" />
+                <ScalarProperty Name="Qihu360OpenEndtime" ColumnName="Qihu360OpenEndtime" />
+                <ScalarProperty Name="Qihu360OpenStarttime" ColumnName="Qihu360OpenStarttime" />
+                <ScalarProperty Name="BaiduOpenEndtime" ColumnName="BaiduOpenEndtime" />
+                <ScalarProperty Name="BaiduOpenStarttime" ColumnName="BaiduOpenStarttime" />
+                <ScalarProperty Name="BaiduEndtime" ColumnName="BaiduEndtime" />
+                <ScalarProperty Name="BaiduStarttime" ColumnName="BaiduStarttime" />
+                <ScalarProperty Name="SalesPerformance" ColumnName="SalesPerformance" />
                 <ScalarProperty Name="LastModifyTime" ColumnName="LastModifyTime" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="SignBill" ColumnName="SignBill" />
@@ -1178,12 +1219,7 @@
                 <ScalarProperty Name="FollowUpPerson" ColumnName="FollowUpPerson" />
                 <ScalarProperty Name="ShopAddress" ColumnName="ShopAddress" />
                 <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
-                <ScalarProperty Name="PauseEngine" ColumnName="PauseEngine" />
-                <ScalarProperty Name="OnlineEngine" ColumnName="OnlineEngine" />
                 <ScalarProperty Name="Product" ColumnName="Product" />
-                <ScalarProperty Name="CheckStatus" ColumnName="CheckStatus" />
-                <ScalarProperty Name="ContractModifyfee" ColumnName="ContractModifyfee" />
-                <ScalarProperty Name="ContractRealArrival" ColumnName="ContractRealArrival" />
                 <ScalarProperty Name="ContractMoney" ColumnName="ContractMoney" />
                 <ScalarProperty Name="ContractCode" ColumnName="ContractCode" />
                 <ScalarProperty Name="OrderRemark" ColumnName="OrderRemark" />

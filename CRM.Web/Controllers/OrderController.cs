@@ -21,7 +21,7 @@ namespace CRM.Web.Controllers
             SelectList Users = new SelectList(_Users, "USERID", "USERNAME",user.USERID);
             var usersList = Users.ToList();
             ViewBag.UserId = usersList;
-            return View(new Order { CustomerStatus= "新签", Idea= "自选", CheckStatus= "未审核", Product= "仅百度", ShopStatus= "未跟进", OrderStatus= "开通" });
+            return View(new Order { CustomerStatus= "新签", Idea= "自选", Product= "仅百度", ShopStatus= "未跟进", OrderStatus= "开通" });
         }
 
         [HttpPost]
