@@ -143,9 +143,9 @@ namespace CRM.Web.Controllers
             try
             {
                 var cus = db.Customer.FirstOrDefault(x =>
-                x.CorporationName == entity.CorporationName
-                || (!string.IsNullOrEmpty(entity.Tel) && x.Tel == entity.Tel)
-                || (!string.IsNullOrEmpty(x.MobileTel) && x.MobileTel == entity.MobileTel));
+                x.CorporationName.Trim() == entity.CorporationName.Trim()
+                || (!string.IsNullOrEmpty(entity.Tel) && x.Tel.Trim() == entity.Tel.Trim())
+                || (!string.IsNullOrEmpty(entity.MobileTel) && x.MobileTel.Trim() == entity.MobileTel.Trim()));
 
                 if (cus != null)
                 {
@@ -212,6 +212,15 @@ namespace CRM.Web.Controllers
         {
             try
             {
+                var cus = db.Customer.Where(x =>
+                x.CorporationName.Trim() == entity.CorporationName.Trim()
+                || (!string.IsNullOrEmpty(entity.Tel) && x.Tel.Trim() == entity.Tel.Trim())
+                || (!string.IsNullOrEmpty(entity.MobileTel) && x.MobileTel.Trim() == entity.MobileTel.Trim()));
+                if(cus!=null && cus.Count()>1)
+                {
+                    return Content(string.Format("<script >alert('编辑失败，错误信息:已经存在公司名称为'{0}'的公司或者手机电话信息出现重复！系统不允许公司相关信息重复！');window.history.go( -1 ); </script >", entity.CorporationName.Trim()), "text/html");
+                }
+
                 entity.LastModify = DateTime.Now;
                 db.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -797,7 +806,7 @@ namespace CRM.Web.Controllers
         public ActionResult CheckCorporationName(string CorporationName)
         {
             CorporationName = CorporationName.Trim();
-            Customer customer = db.Customer.Where(c => c.CorporationName == CorporationName).SingleOrDefault();
+            Customer customer = db.Customer.Where(c => c.CorporationName.Trim() == CorporationName).SingleOrDefault();
             if (customer == null)
             {
                 return Json(new { success = true });
