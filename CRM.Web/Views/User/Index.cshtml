@@ -5,19 +5,65 @@
 }
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+    function ModifyUserState(userid, Status, OperationTitle) {
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要更新的客户，请选择！');
+            return;
+        }
+        art.dialog.confirm('你确定要将该客户' + OperationTitle + '吗？', function () {
 
+            $.post('/User/ModifyUserState', { id: userid, UserState: Status }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+    }
+</script>
 <div style="height:30px;"></div>
+
 @using (Html.BeginForm("Index", "User", FormMethod.Get))
 {
-    @Html.TextBox("userName")
-    <button type="submit" id="btnSearch" class="btn btn-success">查询</button>
+    <table>
+        <tr>
+            <td><label>用户名称：</label></td>
+            <td>@Html.TextBox("userName")</td>
+            <td><label >所在部门</label></td>
+            <td>
+                @Html.DropDownList("DepartmentId", ViewBag.Departments as SelectList, new { @class = "form-control" })
+            </td>
+            <td>
+                <button type="submit" id="btnSearch" class="btn btn-success">查询</button>
+            </td>
+        </tr>
+
+
+    </table>
+
 }
 <p></p>
 <div class="portlet box purple">
 
     <div class="portlet-title">
 
-        <div class="caption"><i class="icon-globe"></i>用户列表</div>
+        @*<div class="caption"><i class="icon-globe"></i>用户列表</div>*@
 
         <div class="tools">
 
@@ -99,11 +145,13 @@
                         {
                             <td style="color:green;">@lable</td>
                         }
-                        
+
                         <td>
                            @Html.ActionLink("编辑", "Edit", new { id = user.USERID }, new { @class = "btn btn-success", target = "_blank" })
-                           | @Html.ActionLink("启用", "ModifyUserState", new { id = user.USERID, UserState = 1 }, new { @class = "btn btn-danger" })
-                            @Html.ActionLink("禁用", "ModifyUserState", new { id = user.USERID, UserState = 0 }, new { @class = "btn btn-danger" })
+                           | <a href="javascript:;" onclick="ModifyUserState('@user.USERID',1,'启用');" class="btn btn-danger">启用</a>
+                            | <a href="javascript:;" onclick="ModifyUserState('@user.USERID',0,'禁用');" class="btn btn-danger">禁用</a>
+                           @*| @Html.ActionLink("启用", "ModifyUserState", new { id = user.USERID, UserState = 1 }, new { @class = "btn btn-danger" })
+                            @Html.ActionLink("禁用", "ModifyUserState", new { id = user.USERID, UserState = 0 }, new { @class = "btn btn-danger" })*@
                             | @Html.ActionLink("密码重置", "ResetPassword", new { id = user.USERID }, new { @class = "btn btn-danger" })
                         </td>
                     </tr>

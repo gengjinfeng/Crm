@@ -10,7 +10,7 @@ namespace CRM.Web.Controllers
     public class UserController : BaseController
     {
         //
-        public ActionResult Index(string userName)
+        public ActionResult Index(string userName,string DepartmentId)
         {
             var items = from u in db.User
                         where u.USERSTATE.Value
@@ -20,6 +20,20 @@ namespace CRM.Web.Controllers
                 string _username = userName.Trim();
                 items = items.Where(u => u.USERNAME.Contains(_username));
             }
+
+
+            var departments = from d in db.Department
+                              select new { DepartmentId = d.DEPARTMENTID, DepartmentName = d.DEPARTMENTNAME };
+            SelectList list=new SelectList(departments, "DepartmentId", "DepartmentName");
+            if (!string.IsNullOrEmpty(DepartmentId) && DepartmentId != "0")
+            {
+                int depid= int.Parse(DepartmentId);
+                list= new SelectList(departments, "DepartmentId", "DepartmentName", DepartmentId);
+
+                items = items.Where(u => u.DEPARTMENTID == depid);
+            }
+            ViewBag.Departments = list;
+
             return View(items);
         }
 
@@ -120,6 +134,7 @@ namespace CRM.Web.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult ModifyUserState(long id, int UserState)
         {
             try
@@ -128,11 +143,14 @@ namespace CRM.Web.Controllers
                 model.USERSTATE = (UserState > 0 ? true : false);
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = true });
+                //return RedirectToAction("Index");
+                //return Content("<script >alert('修改成功！');window.history.go( -1 ); </script >", "text/html");
             }
             catch (Exception ex)
             {
-                return Content(string.Format("<script >alert('修改失败，错误信息:{0}');window.history.go( -1 ); </script >", ex.Message), "text/html");
+                return Json(new { success = false, message = "操作失败：" + ex.Message });
+                //return Content(string.Format("<script >alert('修改失败，错误信息:{0}');window.history.go( -1 ); </script >", ex.Message), "text/html");
             }
         }
 

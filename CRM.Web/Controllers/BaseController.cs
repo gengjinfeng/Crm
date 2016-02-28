@@ -108,7 +108,7 @@ namespace CRM.Web.Controllers
 
         public IEnumerable<User> GetMyUser(string departmentId = "0")
         {
-            IEnumerable<User> items = db.User;
+            IEnumerable<User> items = db.User.Where(u=>u.USERSTATE.Value);
             User currentUser = GetCurrentUser();
             if (currentUser.Role.ROLENAME == "销售经理")
             {
