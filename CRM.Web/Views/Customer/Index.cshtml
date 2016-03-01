@@ -156,6 +156,32 @@ function Edit(id)
     }
     art.dialog.open("/Customer/Edit?id=" + id, { title: '客户编辑', width: 960, height: 600 });
 }
+
+function ClearDiag() {
+    var ids = GetCustomerIds();
+    if (ids == undefined || ids.length == 0) {
+        art.dialog('信息提示：没有选择任何要清除小计的客户，请选择！');
+        return;
+    }
+    art.dialog.confirm('你确定要将所选客户清除小计吗？', function () {
+        $.post('/Customer/ClearInfo', { Ids: ids }, function (result) {
+            if (result.success) {
+                art.dialog({
+                    icon: 'succeed',
+                    content: '批量操作成功！',
+                    ok: function () {
+                    }
+                });
+
+            } else {
+                art.dialog.alert(result.message)
+                art.dialog.close();
+            }
+        });
+    }, function () {
+        return;
+    });
+}
 </script>
 
 <div class="panel panel-default">
@@ -251,6 +277,7 @@ function Edit(id)
                 <li><a href="javascript:;" onclick="BatchMove(2, '移入公共池');">移入公共池</a></li>
                 <li><a href="javascript:;" onclick="BatchMove(3,'移入废弃池');">移入废弃池</a></li>
                 <li><a href="javascript:;" onclick="ShowDiag();">批量更新</a></li>
+                <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
             </ul>
         </div>
     }
