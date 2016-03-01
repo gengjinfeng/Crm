@@ -127,7 +127,7 @@ namespace CRM.Web.Controllers
         public ActionResult SetPageSize()
         {
             HttpCookie cookie = HttpContext.Request.Cookies["PageSize"];
-            ViewBag.pageSize = 50;
+            ViewBag.pageSize = 30;
             if (cookie != null)
             {
                 ViewBag.pageSize = Convert.ToInt32(cookie.Value);
