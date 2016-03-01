@@ -15,7 +15,7 @@ namespace CRM.Web.Controllers
     {
         protected Iso58Entities db = new Iso58Entities();
 
-        public int pageSize = 50;
+        public int pageSize = 30;
 
         //public BaseController()
         //{
