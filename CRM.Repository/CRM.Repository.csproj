@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authority.cs">
+      <DependentUpon>CRM.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrderExtend.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>CRM.tt</DependentUpon>
@@ -107,6 +110,9 @@
       <DependentUpon>CRM.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
+      <DependentUpon>CRM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User3.cs">
       <DependentUpon>CRM.tt</DependentUpon>
     </Compile>
   </ItemGroup>

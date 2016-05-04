@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Iso58Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="DepartmentId" Type="bigint" />
+          <Property Name="CreateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="CustomerID" />
@@ -237,10 +246,50 @@
           <Property Name="PASSWORD" Type="nvarchar" MaxLength="100" />
           <Property Name="DEPARTMENTID" Type="bigint" Nullable="false" />
           <Property Name="USERTYPE" Type="tinyint" />
+          <Property Name="USERSTATE" Type="nvarchar" MaxLength="50" />
+          <Property Name="MOBILEPHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="TR" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User3">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLEID" Type="bigint" Nullable="false" />
+          <Property Name="USERNAME" Type="nchar" MaxLength="50" />
+          <Property Name="PHONE" Type="nchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nchar" MaxLength="50" />
+          <Property Name="PASSWORD" Type="nvarchar" MaxLength="100" />
+          <Property Name="DEPARTMENTID" Type="bigint" Nullable="false" />
+          <Property Name="USERTYPE" Type="tinyint" />
           <Property Name="USERSTATE" Type="bit" />
           <Property Name="MOBILEPHONE" Type="nvarchar" MaxLength="50" />
           <Property Name="TR" Type="datetime" />
         </EntityType>
+        <Association Name="FK__User2__DEPARTMEN__03F0984C">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="DEPARTMENTID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User2__ROLEID__04E4BC85">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ROLEID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ROLEID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_Dep">
           <End Role="Department" Type="Self.Department" Multiplicity="1" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -325,30 +374,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_User_Dep">
-          <End Role="Department" Type="Self.Department" Multiplicity="1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="DEPARTMENTID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="DEPARTMENTID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="ROLEID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ROLEID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Function Name="sp_perf_stats_azure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="appname" Type="nvarchar" Mode="In" />
           <Parameter Name="runtime" Type="datetime" Mode="In" />
@@ -358,6 +383,7 @@
           <Parameter Name="firstrun" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="Iso58ModelStoreContainer">
+          <EntitySet Name="Authority" EntityType="Self.Authority" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataDictionary" EntityType="Self.DataDictionary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataDictionaryItems" EntityType="Self.DataDictionaryItems" Schema="dbo" store:Type="Tables" />
@@ -370,6 +396,15 @@
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User3" EntityType="Self.User3" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__User2__DEPARTMEN__03F0984C" Association="Self.FK__User2__DEPARTMEN__03F0984C">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User2__ROLEID__04E4BC85" Association="Self.FK__User2__ROLEID__04E4BC85">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_Dep" Association="Self.FK_Customer_Dep">
             <End Role="Department" EntitySet="Department" />
             <End Role="Customer" EntitySet="Customer" />
@@ -397,14 +432,6 @@
           <AssociationSet Name="FK_Permission_Role" Association="Self.FK_Permission_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Permission" EntitySet="Permission" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Dep" Association="Self.FK_User_Dep">
-            <End Role="Department" EntitySet="Department" />
-            <End Role="User" EntitySet="User" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
-            <End Role="Role" EntitySet="Role" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -602,7 +629,7 @@
           <Property Name="PASSWORD" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DEPARTMENTID" Type="Int64" Nullable="false" />
           <Property Name="USERTYPE" Type="Byte" />
-          <Property Name="USERSTATE" Type="Boolean" />
+          <Property Name="USERSTATE" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="MOBILEPHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TR" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_Customer_User" FromRole="User" ToRole="Customer" />
@@ -762,6 +789,8 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
+          <EntitySet Name="User3" EntityType="Iso58Model.User3" />
+          <EntitySet Name="Authority" EntityType="Iso58Model.Authority" />
         </EntityContainer>
         <ComplexType Name="sp_perf_stats_azure_Result">
           <Property Type="String" Name="runtime" Nullable="true" MaxLength="30" />
@@ -903,6 +932,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User3">
+          <Key>
+            <PropertyRef Name="USERID" />
+          </Key>
+          <Property Name="USERID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLEID" Type="Int64" Nullable="false" />
+          <Property Name="USERNAME" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="PASSWORD" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DEPARTMENTID" Type="Int64" Nullable="false" />
+          <Property Name="USERTYPE" Type="Byte" />
+          <Property Name="USERSTATE" Type="Boolean" />
+          <Property Name="MOBILEPHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TR" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="DepartmentId" Type="Int64" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1233,6 +1287,33 @@
                 <ScalarProperty Name="KeywordAttach" ColumnName="KeywordAttach" />
                 <ScalarProperty Name="Keyword" ColumnName="Keyword" />
                 <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User3">
+            <EntityTypeMapping TypeName="Iso58Model.User3">
+              <MappingFragment StoreEntitySet="User3">
+                <ScalarProperty Name="TR" ColumnName="TR" />
+                <ScalarProperty Name="MOBILEPHONE" ColumnName="MOBILEPHONE" />
+                <ScalarProperty Name="USERSTATE" ColumnName="USERSTATE" />
+                <ScalarProperty Name="USERTYPE" ColumnName="USERTYPE" />
+                <ScalarProperty Name="DEPARTMENTID" ColumnName="DEPARTMENTID" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Authority">
+            <EntityTypeMapping TypeName="Iso58Model.Authority">
+              <MappingFragment StoreEntitySet="Authority">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

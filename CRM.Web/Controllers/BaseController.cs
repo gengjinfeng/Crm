@@ -68,7 +68,7 @@ namespace CRM.Web.Controllers
                 HttpCookie cookie = HttpContext.Request.Cookies["user"];
                 long UserId = Convert.ToInt64(cookie.Values["UserName"]);// Convert.ToInt64(cookie.Values["UserId"]);
                 var items = from item in db.User
-                            where item.USERID == UserId
+                            where item.USERID == UserId && item.USERSTATE=="1"
                             select item;
                 User user = items.FirstOrDefault();
                 return user;
@@ -94,7 +94,23 @@ namespace CRM.Web.Controllers
                 //仅能看部门内数据
                 items = db.Department.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
             }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+            else if (currentUser.Role.ROLENAME == "高级销售经理-群总")
+            {
+                //看权限设置的部门数据
+                
+                var authDeps = from auth in db.Authority
+                               where auth.UserId == currentUser.USERID
+                               select auth.DepartmentId;
+                if(authDeps.Count()>0)
+                {
+                    items = db.Department.Where(d => authDeps.Contains(d.DEPARTMENTID));
+                }
+                else
+                {
+                    items = db.Department.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
+                }
+            }
+            else if (currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
             {
                 //全部数据
             }
@@ -108,19 +124,39 @@ namespace CRM.Web.Controllers
 
         public IEnumerable<User> GetMyUser(string departmentId = "0")
         {
-            IEnumerable<User> items = db.User.Where(u=>u.USERSTATE.Value);
+            IEnumerable<User> items = db.User.Where(u=>u.USERSTATE=="1");
             User currentUser = GetCurrentUser();
             if (currentUser.Role.ROLENAME == "销售经理")
             {
                 //仅能看部门内数据
-                items = db.User.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
+                items = items.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
             }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+            else if (currentUser.Role.ROLENAME == "高级销售经理-群总")
+            {
+                //看权限设置的部门数据
+                
+                var authDeps = from auth in db.Authority
+                               where auth.UserId == currentUser.USERID
+                               select auth.DepartmentId;
+                if (authDeps.Count() > 0)
+                {
+                    items = items.Where(d => authDeps.Contains(d.DEPARTMENTID));
+                }
+                else
+                {
+                    long depId = Convert.ToInt64(departmentId);
+                    if (depId > 0)
+                    {
+                        items = items.Where(y => y.DEPARTMENTID == depId);
+                    }
+                }
+            }
+            else if (currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
             {
                 long depId = Convert.ToInt64(departmentId);
                 if (depId > 0)
                 {
-                    items = db.User.Where(y => y.DEPARTMENTID == depId);
+                    items = items.Where(y => y.DEPARTMENTID == depId);
                 }
             }
             else

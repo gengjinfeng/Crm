@@ -16,7 +16,7 @@ namespace CRM.Models
         public string PASSWORD { get; set; }
         public long DEPARTMENTID { get; set; }
         public Nullable<byte> USERTYPE { get; set; }
-        public Nullable<bool> USERSTATE { get; set; }
+        public String USERSTATE { get; set; }
         public string MOBILEPHONE { get; set; }
         public Nullable<System.DateTime> TR { get; set; }
 
@@ -30,7 +30,7 @@ namespace CRM.Models
                 {
                     return "无状态";
                 }
-                return USERSTATE.Value ? "启用" : "禁用"; } 
+                return USERSTATE=="1" ? "启用" : "禁用"; } 
         }
 
 

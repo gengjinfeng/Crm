@@ -34,7 +34,7 @@ namespace CRM.Web.Controllers
             {
                 return Content("<script >alert('登录失败，用户名或者密码错误，请输入！');window.history.go( -1 ); </script >", "text/html");
             }
-            if (model.USERSTATE.HasValue && !model.USERSTATE.Value)
+            if (model.USERSTATE!= null && model.USERSTATE!="1")
             {
                 return Content("<script >alert('登录失败，该用户已经禁用，不能登录系统！');window.history.go( -1 ); </script >", "text/html");
             }

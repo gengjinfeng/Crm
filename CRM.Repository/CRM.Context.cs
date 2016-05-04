@@ -39,6 +39,8 @@ namespace CRM.Repository
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<User3> User3 { get; set; }
+        public virtual DbSet<Authority> Authority { get; set; }
     
         public virtual ObjectResult<sp_perf_stats_azure_Result> sp_perf_stats_azure(string appname, Nullable<System.DateTime> runtime)
         {

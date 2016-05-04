@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "用户数据权限设置";
+    Layout = null;
+}
+@using System.Web.UI.WebControls
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/Scripts/DatePicker/WdatePicker.js"></script>
+<script src="~/Scripts/jquery-2.0.2.min.js"></script>
+<script src="~/Scripts/artDialog/artDialog.source.js?skin=green"></script>
+<script src="~/Scripts/artDialog/plugins/iframeTools.js"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+<script type="text/javascript">
+    function GetCustomerIds() {
+        var name = 'Department';
+        var ids = '';
+        var el = document.getElementsByTagName('input');
+        var len = el.length;
+        for (var i = 0; i < len; i++) {
+            if ((el[i].type == "checkbox") && (el[i].name == name) && el[i].checked) {
+                if (ids == '') {
+                    ids = el[i].value;
+                }
+                else {
+                    ids = ids + ',' + el[i].value;
+                }
+            }
+        }
+        return ids;
+    }
+
+    function BatchSubmmit()
+    {
+        var ids=GetCustomerIds();
+        art.dialog.confirm('你确定要将该用户进行数据权限设置吗？', function () {
+            var json = {UserId : '@ViewBag.UserId',DepartmentIds : ids};
+            //alert(json);
+            $.post('/User/Authority', json, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新父级页面
+                            var win = art.dialog.open.origin;
+                            win.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+        
+    }
+</script>
+<form id="batchForm">
+    @Html.Hidden("UserId", ViewBag.UserId as string)
+    
+    <div class="form-group">
+        <label>
+            <strong color:red;">待分配权限的用户:</strong>
+        </label>
+        @Html.Label("UserName", ViewBag.UserName as string, new { @readonly=true, @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>
+            <strong color:red;">拥有的部门数据操作权限:</strong>
+        </label>
+        @Html.CheckBoxList("Department", "Department", RepeatDirection.Vertical)
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-success" onclick="BatchSubmmit();">
+            确定
+        </button>
+    </div>
+</form>
+
+

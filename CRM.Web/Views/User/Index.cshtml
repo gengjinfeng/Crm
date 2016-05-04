@@ -36,6 +36,45 @@
             return;
         });
     }
+
+    function Delete(userid) {
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要删除的客户，请选择！');
+            return;
+        }
+        art.dialog.confirm('你确定要将该客户删除吗？', function () {
+
+            $.post('/User/Delete', { id: userid }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+    }
+
+    function Authority(userid) {
+        //art.dialog('大家好,网址http://www.okbase.net');
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要操作的客户，请选择！');
+            return;
+        }
+        art.dialog.open("/User/Authority?UserId=" + userid, { title: '用户数据权限设置', width: 320, height: 360 });
+    }
 </script>
 <div style="height:30px;"></div>
 
@@ -135,7 +174,7 @@
                         <td>@Html.DisplayFor(modelItem => user.EMAIL)</td>
                         <td>@Html.DisplayFor(modelItem => user.Role.ROLENAME)</td>
                         @{
-                            string lable = (user.USERSTATE != null && user.USERSTATE.Value) ? "启用" : "禁用";
+                            string lable = (user.USERSTATE != null && user.USERSTATE=="1") ? "启用" : "禁用";
                         }
                         @if(@lable=="禁用")
                         {
@@ -148,11 +187,11 @@
 
                         <td>
                            @Html.ActionLink("编辑", "Edit", new { id = user.USERID }, new { @class = "btn btn-success", target = "_blank" })
-                           | <a href="javascript:;" onclick="ModifyUserState('@user.USERID',1,'启用');" class="btn btn-danger">启用</a>
-                            | <a href="javascript:;" onclick="ModifyUserState('@user.USERID',0,'禁用');" class="btn btn-danger">禁用</a>
-                           @*| @Html.ActionLink("启用", "ModifyUserState", new { id = user.USERID, UserState = 1 }, new { @class = "btn btn-danger" })
-                            @Html.ActionLink("禁用", "ModifyUserState", new { id = user.USERID, UserState = 0 }, new { @class = "btn btn-danger" })*@
-                            | @Html.ActionLink("密码重置", "ResetPassword", new { id = user.USERID }, new { @class = "btn btn-danger" })
+                           |<a href="javascript:;" onclick="ModifyUserState('@user.USERID',1,'启用');" class="btn btn-danger">启用</a>
+                            |<a href="javascript:;" onclick="ModifyUserState('@user.USERID',0,'禁用');" class="btn btn-danger">禁用</a>
+                            |@Html.ActionLink("密码重置", "ResetPassword", new { id = user.USERID }, new { @class = "btn btn-danger" })
+                            |<a href="javascript:;" onclick="Delete('@user.USERID',2,'删除');" class="btn btn-danger">删除</a>
+                            |<a href="javascript:;" onclick="Authority('@user.USERID');" class="btn btn-warning">权限</a>
                         </td>
                     </tr>
                 }

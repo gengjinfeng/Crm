@@ -437,6 +437,7 @@
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Order\Edit.cshtml" />
     <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\User\Authority.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

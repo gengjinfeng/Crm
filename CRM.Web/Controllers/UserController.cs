@@ -13,7 +13,6 @@ namespace CRM.Web.Controllers
         public ActionResult Index(string userName,string DepartmentId)
         {
             var items = from u in db.User
-                        where u.USERSTATE.Value
                         select u;
             if (!string.IsNullOrEmpty(userName))
             {
@@ -65,7 +64,7 @@ namespace CRM.Web.Controllers
             try
             {
                 // TODO: Add insert logic here
-                value.USERSTATE = true;
+                value.USERSTATE = "1";
                 db.User.Add(value);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -106,7 +105,7 @@ namespace CRM.Web.Controllers
                 {
                     item.DepartmentID = entity.DEPARTMENTID;
                     db.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -123,14 +122,22 @@ namespace CRM.Web.Controllers
         {
             try
             {
+                var items=db.Customer.Where(c => c.Owner == id && c.PoolStatus.Value>1);
+                foreach (var item in items)
+                {
+                    item.Owner = 35;//gengjinfeng
+                    db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
                 User model = db.User.Find(id);
                 db.User.Remove(model);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return Content(string.Format("<script >alert('删除失败，错误信息:{0}');window.history.go( -1 ); </script >", ex.Message), "text/html");
+                return Json(new { success = false, message = "操作失败：" + ex.Message });
             }
         }
 
@@ -140,7 +147,7 @@ namespace CRM.Web.Controllers
             try
             {
                 User model = db.User.Find(id);
-                model.USERSTATE = (UserState > 0 ? true : false);
+                model.USERSTATE = UserState.ToString();
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { success = true });
@@ -163,6 +170,54 @@ namespace CRM.Web.Controllers
                 db.SaveChanges();
             }
             return Content("<script >alert('密码重置成功！');window.history.go( -1 ); </script >", "text/html");
+        }
+
+        
+        public ActionResult Authority(long UserId)
+        {
+            ViewBag.UserId = UserId;
+            var user = db.User.Where(u => u.USERID == UserId).SingleOrDefault();
+            if (user != null)
+            {
+                ViewBag.UserName = user.USERNAME;
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Authority(long UserId,string DepartmentIds)
+        {
+            try
+            {
+
+
+                var auts = db.Authority.Where(au => au.UserId.Value == UserId);
+                if (auts.Count() > 0)
+                {
+                    foreach (var item in auts)
+                    {
+                        db.Authority.Remove(item);
+                        db.SaveChanges();
+                    }
+                }
+
+                string[] depIds = DepartmentIds.Split(new char[] { ',' });
+                foreach (var item in depIds)
+                {
+                    db.Authority.Add(new Repository.Authority() {
+                        UserId = UserId,
+                        DepartmentId = long.Parse(item)
+                    });
+                    db.SaveChanges();
+                }
+                return Json(new { success = true });
+                //return RedirectToAction("Index");
+                //return Content("<script >alert('修改成功！');window.history.go( -1 ); </script >", "text/html");
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "操作失败：" + ex.Message });
+                //return Content(string.Format("<script >alert('修改失败，错误信息:{0}');window.history.go( -1 ); </script >", ex.Message), "text/html");
+            }
         }
     }
 }

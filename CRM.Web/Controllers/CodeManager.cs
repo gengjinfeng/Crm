@@ -64,7 +64,15 @@ namespace CRM.Web.Controllers
             new CodeDescription("已上线","已上线","OrderStatus"),
             new CodeDescription("暂停","暂停","OrderStatus"),
             new CodeDescription("结束","结束","OrderStatus"),
-            new CodeDescription("退款","退款","OrderStatus")
+            new CodeDescription("退款","退款","OrderStatus"),
+
+            new CodeDescription("1","销售一部","Department"),
+            new CodeDescription("2","销售二部","Department"),
+            new CodeDescription("3","销售三部","Department"),
+            new CodeDescription("4","销售四部","Department"),
+            new CodeDescription("5","销售五部","Department"),
+            new CodeDescription("6","销售六部","Department"),
+            new CodeDescription("15","销售七部","Department")
         };
         public static Collection<CodeDescription> GetCodes(string category)
         {

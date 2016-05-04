@@ -101,6 +101,29 @@ namespace CRM.Web.Controllers
                 {
                     sb.AppendFormat(" and  c.[DepartmentID]={0} ", param.DepartmentId);
                 }
+                else
+                {
+                    long currentUid = Current.USERID;
+                    var authDeps = from auth in db.Authority
+                                   where auth.UserId == currentUid
+                                   select auth.DepartmentId;
+                    if (authDeps.Count() > 0)
+                    {
+                        StringBuilder sbDepIds = new StringBuilder();
+                        foreach (var item in authDeps)
+                        {
+                            if(sbDepIds.Length==0)
+                            {
+                                sbDepIds.Append(item);
+                            }
+                            else
+                            {
+                                sbDepIds.Append("," + item);
+                            }
+                        }
+                        sb.AppendFormat(" and  c.[DepartmentID] in ({0}) ", sbDepIds.ToString());
+                    }
+                }
             }
             else
             {
@@ -189,21 +212,21 @@ namespace CRM.Web.Controllers
             return statusList;
         }
 
-        private IEnumerable<User> GetMyUser(string departmentId = "0")
+        private IEnumerable<User> GetMyUser23(string departmentId = "0")
         {
-            IEnumerable<User> items = db.User;
+            IEnumerable<User> items = db.User.Where(u=>u.USERSTATE=="1");
             User currentUser = GetCurrentUser();
             if (currentUser.Role.ROLENAME == "销售经理")
             {
                 //仅能看部门内数据
-                items = db.User.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
+                items = items.Where(y => y.DEPARTMENTID == currentUser.DEPARTMENTID);
             }
             else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
             {
                 long depId = Convert.ToInt64(departmentId);
                 if (depId > 0)
                 {
-                    items = db.User.Where(y => y.DEPARTMENTID == depId);
+                    items = items.Where(y => y.DEPARTMENTID == depId);
                 }
             }
             else

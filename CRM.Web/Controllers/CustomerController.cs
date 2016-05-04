@@ -816,6 +816,7 @@ namespace CRM.Web.Controllers
             {
                 return Json(new { success = true });
             }
+
             if (customer.PoolStatus == 2)
             {
                 return Json(new { success = false, message = "此客户在公共池中已存在！" , OperationCode =2  });
@@ -824,6 +825,11 @@ namespace CRM.Web.Controllers
             if (customer.PoolStatus == 3)
             {
                 return Json(new { success = false, message = "此客户在废弃池中已存在！", OperationCode = 3 });
+            }
+            //王利的用户
+            if (customer.Owner==1)
+            {
+                return Json(new { success = false, message = string.Format("此客户已存在，所有者为{0}!,你可以拥有！", customer.User.USERNAME), OperationCode =4 });
             }
 
             return Json(new { success = false, message = string.Format("此客户已存在，所有者为{0}!", customer.User.USERNAME), OperationCode = 1});
@@ -998,7 +1004,7 @@ namespace CRM.Web.Controllers
             }
             else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
             {
-                limit = ManagerLimitCustomer * 2;
+                limit = ManagerLimitCustomer * 30;
                 isGreater = items.Count() > limit ? true : false;
             }
             else
@@ -1023,7 +1029,23 @@ namespace CRM.Web.Controllers
                 //仅能看部门内数据
                 items = items.Where(y => y.DepartmentID == currentUser.DEPARTMENTID);
             }
-            else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+            else if (currentUser.Role.ROLENAME == "高级销售经理-群总")
+            {
+                //看权限设置的部门数据
+
+                var authDeps = from auth in db.Authority
+                               where auth.UserId == currentUser.USERID
+                               select auth.DepartmentId;
+                if (authDeps.Count() > 0)
+                {
+                    items = items.Where(d => authDeps.Contains(d.DepartmentID));
+                }
+                else
+                {
+                    items = items.Where(y => y.DepartmentID == currentUser.DEPARTMENTID);
+                }
+            }
+            else if (currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
             {
                 //全部数据
             }
@@ -1038,10 +1060,21 @@ namespace CRM.Web.Controllers
         [HttpGet]
         public JsonResult GetEmployees(long departmentId)
         {
-            var items = from item in db.User select item;
+            var items = from item in db.User.Where(u=>u.USERSTATE=="1") select item;
             if (departmentId > 0)
             {
                 items = items.Where(item => item.DEPARTMENTID== departmentId);
+            }
+            else
+            {
+                long currentUid = GetCurrentUser().USERID;
+                var authDeps = from auth in db.Authority
+                               where auth.UserId == currentUid
+                               select auth.DepartmentId;
+                if (authDeps.Count() > 0)
+                {
+                    items = items.Where(d => authDeps.Contains(d.DEPARTMENTID));
+                }
             }
             var values=from item in items
                   select new { UserId = item.USERID, UserName = item.USERNAME };

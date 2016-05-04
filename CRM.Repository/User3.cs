@@ -12,13 +12,8 @@ namespace CRM.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class User3
     {
-        public User()
-        {
-            this.Customer = new HashSet<Customer>();
-        }
-    
         public long USERID { get; set; }
         public long ROLEID { get; set; }
         public string USERNAME { get; set; }
@@ -27,12 +22,8 @@ namespace CRM.Repository
         public string PASSWORD { get; set; }
         public long DEPARTMENTID { get; set; }
         public Nullable<byte> USERTYPE { get; set; }
-        public string USERSTATE { get; set; }
+        public Nullable<bool> USERSTATE { get; set; }
         public string MOBILEPHONE { get; set; }
         public Nullable<System.DateTime> TR { get; set; }
-    
-        public virtual ICollection<Customer> Customer { get; set; }
-        public virtual Department Department { get; set; }
-        public virtual Role Role { get; set; }
     }
 }
