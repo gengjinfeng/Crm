@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "编辑订单";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Web.UI.WebControls
+@model CRM.Repository.Order
+<form class="form-inline" action="@Url.Action("Edit", "Order")" method="post">
+    <div class="panel panel-primary">
+        <div class="panel-heading">提单人员填写</div>
+        <div class="panel-body">
+            <div class="alert alert-success" role="alert">客户基本信息</div>
+            <div class="form-group">
+                <label>
+                    提单人员: 
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @readonly = true })
+                </label>
+            </div>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.CreateDate)
+            @Html.HiddenFor(m=>m.CustomerId)
+            @Html.HiddenFor(m=>m.Customer.CustomerID)
+            <div class="form-group">
+                <label for="exampleInputName2">公司名称(*)</label>
+                @Html.TextBoxFor(x => x.Customer.CorporationName, new { @class = "form-control", @readonly = true })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">客户联系人</label>
+                @Html.TextBoxFor(x => x.Customer.CustomerName, new { @class = "form-control", @readonly = true})
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">客户联系电话</label>
+                @Html.TextBoxFor(x => x.Customer.Tel, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">手机</label>
+                @Html.TextBoxFor(x => x.Customer.MobileTel, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">传真</label>
+                @Html.TextBoxFor(x => x.Customer.Fax, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">客户邮箱</label>
+                @Html.TextBoxFor(x => x.Customer.Email, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">省份</label>
+                @Html.TextBoxFor(x => x.Customer.Province, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">城市</label>
+                @Html.TextBoxFor(x => x.Customer.City, new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">行业</label>
+                @Html.TextBoxFor(x => x.Customer.Industry, new { @class = "form-control", @readonly = true })
+            </div>
+            <p></p>
+            <div class="alert alert-success" role="alert">订单信息</div>
+            <div class="form-group">
+                <label for="exampleInputName2">客户状态</label>
+                @Html.RadioButtonListFor(m => m.CustomerStatus, "CustomerStatus")
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">产品属性 </label>
+                @Html.RadioButtonListFor(m => m.Product, "Product", RepeatDirection.Horizontal)
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">签单金额(*)</label>
+                @Html.TextBoxFor(x => x.SignBill, new { @class = "form-control", @placeholder = "必填项" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">周期(*)</label>
+                @Html.TextBoxFor(x => x.Period, new { @class = "form-control", @placeholder = "必填项" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">推广关键词(*)</label>
+                @Html.TextBoxFor(x => x.Keyword, new { @class = "form-control", @placeholder = "必填项" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">赠送词</label>
+                @Html.TextBoxFor(x => x.KeywordAttach, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">一级域名地址</label>
+                @Html.TextBoxFor(x => x.Url, new { @class = "form-control" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">ID号</label>
+                @Html.TextBoxFor(x => x.IDCode, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">模板编号</label>
+                @Html.TextBoxFor(x => x.TemplateCode, new { @class = "form-control" })
+            </div>
+            
+            <div class="form-group">
+                <label for="exampleInputName2">选择创意 </label>
+                @Html.RadioButtonListFor(m => m.Idea, "Idea")
+            </div>
+           <br />
+            <div class="form-group">
+                <label for="exampleInputName2">百度账号</label>
+                @Html.TextBoxFor(x => x.BaiduAccount, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">百度密码</label>
+                @Html.TextBoxFor(x => x.BaiduPwd, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">百度密保答案</label>
+                @Html.TextBoxFor(x => x.BaiduAnswer, new { @class = "form-control" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">备注</label>
+                @Html.TextAreaFor(x => x.OrderRemark, new { @class = "form-control",rows=5,cols=300 })
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading"><strong style="font-size:14px;">财务人员填写</strong>
+    <a id="cwLink" href="javascript:;" onclick="slideToggle('divObj')" style=" float:right; color:green"><strong>折叠起来</strong></a>
+    </div>
+        <div id="divObj" class="panel-body">
+
+            <div class="form-group">
+                <label for="exampleInputName2">合同编号</label>
+                @Html.TextBoxFor(x => x.ContractCode, new { @class = "form-control", @placeholder = "合同编号" })
+            </div>
+            @*<div class="form-group">
+                <label for="exampleInputName2">认款</label>
+                @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "认款" })
+            </div>*@
+            <div class="form-group">
+                <label for="exampleInputName2">合同金额</label>
+                @Html.TextBoxFor(x => x.ContractMoney, new { @class = "form-control", @placeholder = "到款金额" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">算入业绩金额</label>
+                @Html.TextBoxFor(x => x.SalesPerformance, new { @class = "form-control", @placeholder = "修改费用" })
+            </div>
+        </div>
+    </div>
+    @*<div class="panel panel-info">
+        <div class="panel-heading">
+            <strong style="font-size:14px;">客服人员填写</strong>
+            <a id="kfLink" href="javascript:;" onclick="slideToggle('kfpanel')" style=" float:right; color:green"><strong>折叠起来</strong></a>
+        </div>
+        <div id="kfpanel" class="panel-body">
+
+            <div class="form-group">
+                <label for="exampleInputName2">审核</label>
+                @Html.RadioButtonListFor(m => m.CheckStatus, "CheckStatus")
+            </div>
+            
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">开通引擎</label>
+                @Html.TextBoxFor(x => x.OnlineEngine, new { @class = "form-control", @placeholder = "开通引擎" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">暂停引擎</label>
+                @Html.TextBoxFor(x => x.PauseEngine, new { @class = "form-control", @placeholder = "暂停引擎" })
+            </div>
+        </div>
+    </div>*@
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+        <strong style="font-size:14px;">编辑人员填写</strong>
+        <a id="editorLink" href="javascript:;" onclick="slideToggle('editorpanel')" style=" float:right; color:green"><strong>折叠起来</strong></a>
+        </div>
+        <div id="editorpanel" class="panel-body">
+            <div class="form-group">
+                <label for="exampleInputName2">商铺状态</label>
+                @Html.RadioButtonListFor(m => m.ShopStatus, "ShopStatus")
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">商铺地址</label>
+                @Html.TextBoxFor(x => x.ShopAddress, new { @class = "form-control", @placeholder = "商铺地址" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">跟进人</label>
+                @Html.TextBoxFor(x => x.FollowUpPerson, new { @class = "form-control", @placeholder = "跟进人" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">制作开始时间</label>
+                @Html.TextBoxFor(x => x.ShopMakeStarttime, new { @class = "form-control", @placeholder = "制作开始时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">制作结束时间</label>
+                @Html.TextBoxFor(x => x.ShopMakeEndtime, new { @class = "form-control", @placeholder = "制作结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">备注</label>
+                @Html.TextAreaFor(x => x.ShopRemark, new { @class = "form-control", rows = 5, cols = 300 })
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+        <strong style="font-size:14px;">运营人员填写</strong>
+        <a id="ywLink" href="javascript:;" onclick="slideToggle('ywpanel')" style=" float:right; color:green"><strong>折叠起来</strong></a>
+        </div>
+        <div id="ywpanel" class="panel-body">
+            <div class="form-group">
+                <label for="exampleInputName2">状态</label>
+                @Html.RadioButtonListFor(m => m.OrderStatus, "OrderStatus")
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">锦囊上线时间</label>
+                @Html.TextBoxFor(x => x.GuideStarttime, new { @class = "form-control", @placeholder = "锦囊上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">锦囊结束时间</label>
+                @Html.TextBoxFor(x => x.GuideEndtime, new { @class = "form-control", @placeholder = "锦囊结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">掘金上线时间</label>
+                @Html.TextBoxFor(x => x.NuggetStarttime, new { @class = "form-control", @placeholder = "掘金上线时间", onfocus = "date()" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">掘金结束时间</label>
+                @Html.TextBoxFor(x => x.NuggetEndtime, new { @class = "form-control", @placeholder = "掘金结束时间", onfocus = "date()" })
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="exampleInputName2">备注</label>
+                @Html.TextAreaFor(x => x.OperationRemark, new { @class = "form-control", rows = 5, cols = 300 })
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <button type="submit" class="btn btn-info">保存</button>
+</form>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+            $("#cwLink").click();
+            $("#kfLink").click();
+            $("#editorLink").click();
+            $("#ywLink").click();
+            function slideToggle(panel) {
+                $('#' + panel).slideToggle(500);//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
+            }
+    </script>

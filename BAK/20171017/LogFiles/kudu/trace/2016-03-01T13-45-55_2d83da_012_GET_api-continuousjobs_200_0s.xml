@@ -1,0 +1,4 @@
+<step title="Incoming Request" date="2016-03-01T13:45:55.555" instance="2d83da" url="/api/continuousjobs/" method="GET" type="request" pid="13808,2,16" Connection="Keep-Alive" Accept="application/json" Accept-Language="zh-Hans" Host="crmonline.scm.chinacloudsites.cn" User-Agent="Azure-Portal/5.15.00298.32" x-ms-client-request-id="100fa43b-204b-426b-b958-39b1baf351fb-2016-03-01 13:45:46Z" x-ms-client-session-id="951ff219-bbf3-4847-b6ee-9ebbd56ff841" X-SITE-DEPLOYMENT-ID="CrmOnline" >
+  <step title="Cleanup Xml Logs" date="2016-03-01T13:45:55.555" /><!-- duration: 16ms -->
+  <step title="Outgoing response" date="2016-03-01T13:45:55.586" type="response" statusCode="200" statusText="OK" Server="Microsoft-IIS/8.0" x-ms-request-id="4bb86328-9dff-42d3-9354-7122ea57f395" ETag="&quot;11&quot;" Cache-Control="private" X-AspNet-Version="4.0.30319" Content-Type="application/json; charset=utf-8" /><!-- duration: 0ms -->
+</step><!-- duration: 31ms -->

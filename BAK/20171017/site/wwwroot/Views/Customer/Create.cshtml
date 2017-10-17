@@ -1,0 +1,716 @@
+﻿@model CRM.Repository.Customer
+@{
+    ViewBag.Title = "新增客户";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/style-metro.css" rel="stylesheet" />
+<link href="~/Content/style.css" rel="stylesheet" />
+<link href="~/Content/style-responsive.css" rel="stylesheet" />
+<link href="~/Content/default.css" rel="stylesheet" />
+<link href="~/Content/uniform.default.css" rel="stylesheet" />
+<link href="~/Content/select2_metro.css" rel="stylesheet" />
+<p></p>
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div class="caption"><i class="icon-reorder"></i>新建客户基本信息</div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"></a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        @using (Ajax.BeginForm("Create", "Customer", new AjaxOptions() { HttpMethod = "POST" }, new { id = "customerForm", @class = "form-horizontal", novalidate = "novalidate" }))
+        {
+            <div >
+                <button type="submit" class="btn green">保存并新建</button>
+                @Html.ActionLink("返回客户列表", "BackToList", null, new { @class = "btn red" })
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12 ">
+                    <div class="control-group">
+                        <label class="control-label">公司名称<span class="required">*</span></label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.CorporationName, new { @class = "m-wrap span12" })
+                        </div>
+                        <a href="javascript:;" onclick="Check();" class="btn green">检查该公司是否在库中已存在</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">姓名</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.CustomerName, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">状态</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(x => x.Status, ViewData["Status"] as SelectList, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">行业</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(x => x.Industry, ViewData["Industry"] as SelectList, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">部门</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(x => x.DepartmentID, ViewBag.DepartmentList as SelectList, new { @class = "m-wrap span12", @disabled = true })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">电话</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Tel, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">传真</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Fax, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">城市</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.City, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">手机</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.MobileTel, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">来源类型（填）</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(x => x.SourseFrom, ViewBag.SourceFrom as SelectList, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">类型</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(x => x.CustomerType, new List<SelectListItem>() { new SelectListItem() { Text = "普通客户", Value = "普通客户" } }, new { @class = "m-wrap span12", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12 ">
+                    <div class="control-group">
+                        <label class="control-label">下次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.NextContactTime, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">省份（填）</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Province, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">注册资金（万）</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.RegisteredCapital, new { @class = "m-wrap span12" })
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row-fluid">
+
+                <div class="span12 ">
+
+                    <div class="control-group">
+
+                        <label class="control-label">地址</label>
+
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Address, new { @class = "m-wrap span12" })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row-fluid">
+
+                <div class="span12 ">
+
+                    <div class="control-group">
+
+                        <label class="control-label">网址</label>
+
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.WebSite, new { @class = "m-wrap span12" })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="row-fluid">
+
+                <div class="span12 ">
+
+                    <div class="control-group">
+
+                        <label class="control-label">网址(备注)</label>
+
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.WebSiteRemark, new { @class = "m-wrap span12" })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>*@
+            <div class="row-fluid">
+
+                <div class="span12 ">
+
+                    <div class="control-group">
+
+                        <label class="control-label">电子邮件</label>
+
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Email, new { @class = "m-wrap span12" })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row-fluid">
+
+                <div class="span12 ">
+
+                    <div class="control-group">
+
+                        <label class="control-label">描述</label>
+
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = 8 })
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <p></p>
+            <p>
+                <input type="button" value="新增小计" class="btn blue" onclick="slideToggle10()" /> 
+            </p>
+               <div id="divObj10" style="display:none">
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第一次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.FirstContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记一</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.FirstRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第二次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.SecondContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记二</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.SecondRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第三次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.ThirdContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记三</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.ThirdRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第四次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.FourthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记四</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.FourthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第五次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.FifthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记五</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.FifthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第六次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.SixthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记六</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.SixthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第七次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.SeventhContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记七</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.SeventhRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第八次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.EighthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记八</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.EighthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第九次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.NinthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记九</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.NinthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">第十次联系时间</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.TenthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">小记十</label>
+                        <div class="controls">
+                            @Html.TextAreaFor(x => x.TenthRemark, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                   </div>
+            <p>
+                <input type="button" value="新增小计" class="btn blue" onclick="slideToggle20()" /> 
+            </p>
+    
+            
+    <div id="divObj20" style="display:none">
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十一次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.ElevenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十一</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.ElevenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十二次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.twelveContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十二</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.twelveRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十三次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.thirteenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十三</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.thirteenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十四次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.fourteenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十四</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.fourteenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十五次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.FifthContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十五</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.FifthRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十六次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.sixteenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十六</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.sixteenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十七次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.seventeenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十七</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.seventeenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十八次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.eighteenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十八</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.eighteenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第十九次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.nineteenContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记十九</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.nineteenRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">第二十次联系时间</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(x => x.twentyContactDate, new { @class = "m-wrap span12 definewidth91 Wdate", onfocus = "date()" })
+                    </div>
+                </div>
+            </div>
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">小记二十</label>
+                    <div class="controls">
+                        @Html.TextAreaFor(x => x.twentyRemark, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+            <div >
+                <button type="submit" class="btn green">保存并新建</button>
+                @Html.ActionLink("返回客户列表", "BackToList", null, new { @class = "btn red" })
+            </div>
+
+        }
+
+        <!-- END FORM-->
+
+
+            </div>
+</div>
+<script type="text/javascript">
+    function slideToggle10() {
+        $("#divObj10").slideToggle(1000);//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
+    }
+    function slideToggle20() {
+        $("#divObj20").slideToggle(1000);//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
+    }
+
+    function Check() {
+        var companyName = $("#CorporationName").val();
+        if (companyName == undefined || companyName.length == 0) {
+            art.dialog('信息提示：客户名称不能为空，请重新输入！');
+            return;
+        }
+        $.post('/Customer/CheckCorporationName', { CorporationName: companyName }, function (result) {
+            if (result.success) {
+                art.dialog({
+                    icon: 'succeed',
+                    content: '恭喜你，此公司在库中不存在！',
+                    ok: function () {
+                        //刷新页面
+                        //window.location.reload();
+                        //关闭窗口
+                        art.dialog.close();
+                    }
+                });
+
+            } else {
+                if (result.OperationCode == 1)
+                {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+                else
+                {
+                    art.dialog({
+                        title: '信息提示',
+                        content: result.message + ' 赶快抢入我的客户列表中！',
+                        okValue: '确定',
+                        ok: function () {
+                            this.title('提交中…');
+                            $.post('/Customer/GrabCustomer', { CorporationName: companyName }, function (GrabResult) {
+                                if (GrabResult.success) {
+                                    art.dialog({
+                                        icon: 'succeed',
+                                        content: '恭喜你，客户归你了，抢成功！',
+                                        ok: function () {
+                                            //刷新页面
+                                            window.location.href = "/Customer/Edit/" + GrabResult.CustomerId;
+                                            //关闭窗口
+                                            art.dialog.close();
+                                        }
+                                    });
+                                }
+                                else {
+                                    art.dialog.alert(GrabResult.message)
+                                    //关闭窗口
+                                    art.dialog.close();
+                                }
+                            });
+
+                        },
+                        cancelValue: '取消',
+                        cancel: function () { }
+                    });
+                }
+                
+                
+            }
+        });
+    }
+</script>

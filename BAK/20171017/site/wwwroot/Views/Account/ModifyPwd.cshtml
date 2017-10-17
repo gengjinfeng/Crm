@@ -1,0 +1,35 @@
+﻿@model CRM.Models.UserEntity
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p></p>
+<div>
+    <form action="@Url.Action("ModifyPwd", "Account")" method="post">
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <td class="tableleft">真实姓名</td>
+                <td>@Html.DisplayFor(x => x.USERNAME)</td>
+            </tr>
+            <tr>
+                <td class="tableleft">所在部门</td>
+                <td>@Html.DisplayFor(x => x.DEPARTMENT)</td>
+            </tr>
+            <tr>
+                <td class="tableleft">旧密码</td>
+                <td>@Html.PasswordFor(x => x.OldPassword, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td class="tableleft">新密码</td>
+                <td>@Html.PasswordFor(x => x.NewPassword, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td class="tableleft"></td>
+                <td>
+                    <button type="submit" class="btn btn-success">保存</button> &nbsp;&nbsp;
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

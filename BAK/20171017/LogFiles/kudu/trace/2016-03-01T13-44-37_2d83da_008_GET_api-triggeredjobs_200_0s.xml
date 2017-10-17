@@ -1,0 +1,4 @@
+<step title="Incoming Request" date="2016-03-01T13:44:37.214" instance="2d83da" url="/api/triggeredjobs/" method="GET" type="request" pid="13808,2,5" Connection="Keep-Alive" Accept="application/json" Accept-Language="zh-Hans" Host="crmonline.scm.chinacloudsites.cn" User-Agent="Azure-Portal/5.15.00298.32" x-ms-client-request-id="914c918f-dc47-49a9-94ff-4d711aba252e-2016-03-01 13:44:28Z" x-ms-client-session-id="951ff219-bbf3-4847-b6ee-9ebbd56ff841" X-SITE-DEPLOYMENT-ID="CrmOnline" >
+  <step title="Cleanup Xml Logs" date="2016-03-01T13:44:37.229" /><!-- duration: 16ms -->
+  <step title="Outgoing response" date="2016-03-01T13:44:37.245" type="response" statusCode="200" statusText="OK" Server="Microsoft-IIS/8.0" x-ms-request-id="d9835c4e-6898-4e80-a413-3fa755c50963" ETag="&quot;11&quot;" Cache-Control="private" X-AspNet-Version="4.0.30319" Content-Type="application/json; charset=utf-8" /><!-- duration: 16ms -->
+</step><!-- duration: 47ms -->

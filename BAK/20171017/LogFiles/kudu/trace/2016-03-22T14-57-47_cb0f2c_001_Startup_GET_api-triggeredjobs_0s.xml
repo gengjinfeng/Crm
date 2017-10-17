@@ -1,0 +1,3 @@
+<step title="Startup Request" date="2016-03-22T14:57:47.789" instance="cb0f2c" url="/api/triggeredjobs/" method="GET" type="request" pid="11872,2,6" ScmType="None" >
+  <step title="Cleanup Xml Logs" date="2016-03-22T14:57:47.805" /><!-- duration: 16ms -->
+</step><!-- duration: 31ms -->

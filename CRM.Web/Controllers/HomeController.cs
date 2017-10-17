@@ -192,6 +192,7 @@ namespace CRM.Web.Controllers
                "普3类",
                "重3类",
                "4类",
+               "重4类",
                "5类",
                "6类",
                "9类",
