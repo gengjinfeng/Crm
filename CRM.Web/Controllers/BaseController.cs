@@ -174,5 +174,44 @@ namespace CRM.Web.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        public bool IsRole
+        {
+            get
+            {
+                User currentUser = GetCurrentUser();
+                if (currentUser.Role.ROLENAME == "销售经理")
+                {
+                    return true;
+                }
+                else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+                {
+                    return true;
+                }
+                else
+                {
+                    //仅能看自己数据
+                    return false;
+                }
+            }
+        }
+
+        public bool IsDirectorRole
+        {
+            get
+            {
+                User currentUser = GetCurrentUser();
+                if (currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
+                {
+                    return true;
+                }
+                else
+                {
+                    //仅能看自己数据
+                    return false;
+                }
+            }
+        }
     }
 }

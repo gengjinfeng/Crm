@@ -23,6 +23,7 @@ namespace CRM.Web.Controllers
             InitPageSize();
 
             ViewBag.IsRole = IsRole;
+            ViewBag.IsDirectorRole = IsDirectorRole;
 
             var sourceFromList = GetSourceFrom(fromType).ToList();
             var statusSelectList = GetStatusList(status).ToList();
@@ -261,6 +262,7 @@ namespace CRM.Web.Controllers
         {
             InitPageSize();
             ViewBag.IsRole = IsRole;
+            ViewBag.IsDirectorRole = IsDirectorRole;
 
             var sourceFromList = GetSourceFrom(fromType).ToList();
             var statusSelectList = GetStatusList2(status).ToList();
@@ -767,44 +769,6 @@ namespace CRM.Web.Controllers
                 return Json(new { success = false, message = "操作失败：" + ex.Message });
             }
             return Json(new { success = true });
-        }
-
-        public bool IsRole
-        {
-            get
-            {
-                User currentUser = GetCurrentUser();
-                if (currentUser.Role.ROLENAME == "销售经理")
-                {
-                    return true;
-                }
-                else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-                {
-                    return true;
-                }
-                else
-                {
-                    //仅能看自己数据
-                    return false;
-                }
-            }
-        }
-
-        public bool IsDirectorRole
-        {
-            get
-            {
-                User currentUser = GetCurrentUser();
-                if(currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-                {
-                    return true;
-                }
-                else
-                {
-                    //仅能看自己数据
-                    return false;
-                }
-            }
         }
 
 

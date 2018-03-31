@@ -278,7 +278,7 @@
                 <td>
                     @Html.ActionLink("查看", "Details", new { id = item.CustomerID }, new { @class = "btn btn-info", target = "_blank" })
                     <a href="javascript:;" onclick="SingleMove('@item.CustomerID',1, '放入我的客户');" class="btn btn-danger">放入我的客户</a>
-                    @if (ViewBag.IsRole)
+                    @if (ViewBag.IsDirectorRole)
                     {
                         <a href="javascript:;" onclick="Delete(@item.CustomerID);" class="btn btn-danger">删除</a>
                     }

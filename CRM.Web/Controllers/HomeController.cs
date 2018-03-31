@@ -21,6 +21,7 @@ namespace CRM.Web.Controllers
         public ActionResult Statics(StaticsSearchParams param)
         {
             ViewBag.IsRole = IsRole;
+            ViewBag.IsDirectorRole = IsDirectorRole;
             User Current = GetCurrentUser();
             var statusSelectList = GetStatusList(param.Status).ToList();
             statusSelectList.Insert(0, new SelectListItem() { Text = "全部", Value = "" });
@@ -236,28 +237,6 @@ namespace CRM.Web.Controllers
                 items = items.Where(y => y.USERID == currentUser.USERID);
             }
             return items;
-        }
-
-
-        public bool IsRole
-        {
-            get
-            {
-                User currentUser = GetCurrentUser();
-                if (currentUser.Role.ROLENAME == "销售经理")
-                {
-                    return true;
-                }
-                else if (currentUser.Role.ROLENAME == "高级销售经理-群总" || currentUser.Role.ROLENAME == "销售总监" || currentUser.Role.ROLENAME == "高级管理员")
-                {
-                    return true;
-                }
-                else
-                {
-                    //仅能看自己数据
-                    return false;
-                }
-            }
         }
 
         public ActionResult Error(string error="")
