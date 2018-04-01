@@ -276,9 +276,9 @@ function ClearDiag() {
             <ul class="dropdown-menu pull-right">
                 <li><a href="javascript:;" onclick="BatchMove(2, '移入公共池');">移入公共池</a></li>
                 <li><a href="javascript:;" onclick="BatchMove(3,'移入废弃池');">移入废弃池</a></li>
+                <li><a href="javascript:;" onclick="ShowDiag();">批量更新</a></li>
                 @if (ViewBag.IsDirectorRole)
                 {
-                    <li><a href="javascript:;" onclick="ShowDiag();">批量更新</a></li>
                     <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
                 }
             </ul>
