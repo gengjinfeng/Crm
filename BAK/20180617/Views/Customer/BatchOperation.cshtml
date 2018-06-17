@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "批量更新";
+    Layout = null;
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<script type="text/javascript" src="/Scripts/DatePicker/WdatePicker.js"></script>
+<script src="~/Scripts/jquery-2.0.2.min.js"></script>
+<script src="~/Scripts/artDialog/artDialog.source.js?skin=green"></script>
+<script src="~/Scripts/artDialog/plugins/iframeTools.js"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+
+<script type="text/javascript">
+    //var value = art.dialog.data('key');
+    //if (value != undefined)
+    //{
+    //    alert(value);
+    //    //$("#CustomerIds").val(value);
+    //}
+    
+    function date() {
+        WdatePicker({
+            isShowWeek: true,
+            dateFmt: 'yyyy-MM-dd HH:mm:ss',
+            onpicked: function () {
+                $dp.$('d122_1').value = $dp.cal.getP('W', 'W');
+            }
+        });
+    }
+
+    function BatchSubmmit()
+    {
+        art.dialog.confirm('你确定要将所选客户进行批量更新吗？', function () {
+            var json = $("#batchForm").serialize();
+            //alert(json);
+            $.post('/Customer/BatchOperation', json, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '批量操作成功！',
+                        ok: function () {
+                            //刷新父级页面
+                            var win = art.dialog.open.origin;
+                            win.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+        
+    }
+</script>
+<form id="batchForm">
+    @Html.Hidden("CustomerIds", ViewBag.CustomerIds as string)
+    <div class="form-group">
+        <label>
+            <strong color:red;">更新所有者:</strong>
+        </label>
+        @Html.DropDownList("Owner", ViewBag.Owner as List<SelectListItem>, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>
+            <strong color:red;">更新状态:</strong>
+        </label>
+        @Html.DropDownList("Status", ViewBag.Status as List<SelectListItem>, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>
+            <strong color:red;">更新下次联系时间:</strong>
+        </label>
+        @Html.TextBox("NextContractTime", ViewBag.NextContractTimeParams as string, new { onfocus = "date()", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-success" onclick="BatchSubmmit();">
+            确定
+        </button>
+    </div>
+</form>
+
+

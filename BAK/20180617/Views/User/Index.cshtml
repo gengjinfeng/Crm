@@ -1,0 +1,204 @@
+﻿@model IEnumerable<CRM.Repository.User>
+@{
+    ViewBag.Title = "用户列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+    function ModifyUserState(userid, Status, OperationTitle) {
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要更新的客户，请选择！');
+            return;
+        }
+        art.dialog.confirm('你确定要将该客户' + OperationTitle + '吗？', function () {
+
+            $.post('/User/ModifyUserState', { id: userid, UserState: Status }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+    }
+
+    function Delete(userid) {
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要删除的客户，请选择！');
+            return;
+        }
+        art.dialog.confirm('你确定要将该客户删除吗？', function () {
+
+            $.post('/User/Delete', { id: userid }, function (result) {
+                if (result.success) {
+                    art.dialog({
+                        icon: 'succeed',
+                        content: '操作成功！',
+                        ok: function () {
+                            //刷新页面
+                            window.location.reload();
+                            //关闭窗口
+                            art.dialog.close();
+                        }
+                    });
+
+                } else {
+                    art.dialog.alert(result.message)
+                    art.dialog.close();
+                }
+            });
+        }, function () {
+            return;
+        });
+    }
+
+    function Authority(userid) {
+        //art.dialog('大家好,网址http://www.okbase.net');
+        if (userid == undefined || userid.length == 0) {
+            art.dialog('信息提示：没有选择任何要操作的客户，请选择！');
+            return;
+        }
+        art.dialog.open("/User/Authority?UserId=" + userid, { title: '用户数据权限设置', width: 320, height: 360 });
+    }
+</script>
+<div style="height:30px;"></div>
+
+@using (Html.BeginForm("Index", "User", FormMethod.Get))
+{
+    <table>
+        <tr>
+            <td><label>用户名称：</label></td>
+            <td>@Html.TextBox("userName")</td>
+            <td><label >所在部门</label></td>
+            <td>
+                @Html.DropDownList("DepartmentId", ViewBag.Departments as SelectList, new { @class = "form-control" })
+            </td>
+            <td>
+                <button type="submit" id="btnSearch" class="btn btn-success">查询</button>
+            </td>
+        </tr>
+
+
+    </table>
+
+}
+<p></p>
+<div class="portlet box purple">
+
+    <div class="portlet-title">
+
+        @*<div class="caption"><i class="icon-globe"></i>用户列表</div>*@
+
+        <div class="tools">
+
+            <a href="javascript:;" class="collapse"></a>
+
+            <a href="javascript:;" class="reload"></a>
+
+        </div>
+
+    </div>
+
+    <div class="portlet-body">
+
+        <div class="clearfix">
+
+            <div class="btn-group">
+
+                @Html.ActionLink("新增员工", "Create", null, new { @class = "btn btn-success", target = "_blank" })
+
+            </div>
+
+            <div class="btn-group pull-right">
+
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    Tools <i class="icon-angle-down"></i>
+
+                </button>
+
+                <ul class="dropdown-menu pull-right">
+
+                    <li><a href="#">Print</a></li>
+
+                    <li><a href="#">Save as PDF</a></li>
+
+                    <li><a href="#">Export to Excel</a></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <table class="table table-striped table-bordered table-hover" id="sample_1">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>真实姓名</th>
+                    <th>部门</th>
+                    <th>手机</th>
+                    <th>电话</th>
+                    <th>Email</th>
+                    <th>所属角色</th>
+                    <th>用户状态</th>
+                    <th>操作</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr class="odd gradeX">
+                        <td>@Html.DisplayFor(modelItem => user.USERID)</td>
+                        <td>@Html.DisplayFor(modelItem => user.USERNAME)</td>
+                        <td>@Html.DisplayFor(modelItem => user.Department.DEPARTMENTNAME)</td>
+                        <td>@Html.DisplayFor(modelItem => user.MOBILEPHONE)</td>
+                        <td>@Html.DisplayFor(modelItem => user.PHONE)</td>
+                        <td>@Html.DisplayFor(modelItem => user.EMAIL)</td>
+                        <td>@Html.DisplayFor(modelItem => user.Role.ROLENAME)</td>
+                        @{
+                            string lable = (user.USERSTATE != null && user.USERSTATE=="1") ? "启用" : "禁用";
+                        }
+                        @if(@lable=="禁用")
+                        {
+                            <td style="color:red; font-size:24px;">@lable</td>
+                        }
+                        else
+                        {
+                            <td style="color:green;">@lable</td>
+                        }
+
+                        <td>
+                           @Html.ActionLink("编辑", "Edit", new { id = user.USERID }, new { @class = "btn btn-success", target = "_blank" })
+                           |<a href="javascript:;" onclick="ModifyUserState('@user.USERID',1,'启用');" class="btn btn-danger">启用</a>
+                            |<a href="javascript:;" onclick="ModifyUserState('@user.USERID',0,'禁用');" class="btn btn-danger">禁用</a>
+                            |@Html.ActionLink("密码重置", "ResetPassword", new { id = user.USERID }, new { @class = "btn btn-danger" })
+                            |<a href="javascript:;" onclick="Delete('@user.USERID',2,'删除');" class="btn btn-danger">删除</a>
+                            |<a href="javascript:;" onclick="Authority('@user.USERID');" class="btn btn-warning">权限</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,92 @@
+﻿@model CRM.Repository.User
+@using CRM.Repository;
+@{
+    ViewBag.Title = "编辑用户";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet" />
+<p></p>
+<div>
+    <form action="@Url.Action("Edit", "User")" method="post">
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <td class="tableleft">真实姓名</td>
+                        @Html.HiddenFor(x => x.USERID)
+                        @Html.HiddenFor(x => x.PASSWORD)
+                        @Html.HiddenFor(x=>x.USERSTATE)
+                <td>@Html.TextBoxFor(x => x.USERNAME, new { @class = "form-control" })</td>
+            </tr>
+
+            <tr>
+                <td class="tableleft">邮箱</td>
+                <td>@Html.TextBoxFor(x => x.EMAIL, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td class="tableleft">手机</td>
+                <td>@Html.TextBoxFor(x => x.MOBILEPHONE, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td class="tableleft">电话</td>
+                <td>@Html.TextBoxFor(x => x.PHONE, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td class="tableleft">所属角色</td>
+                <td>
+                    @Html.DropDownList("RoleId", ViewBag.Roles as SelectList, new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td class="tableleft">所在部门</td>
+                <td>
+                    @Html.DropDownList("DepartmentId", ViewBag.Departments as SelectList, new { @class = "form-control" })
+                </td>
+            </tr>
+@*@{
+    string CurrentUserRole = string.Empty;
+    bool IsInRole = false;
+    using (Iso58Entities db = new Iso58Entities())
+    {
+        HttpCookie cookie = HttpContext.Current.Request.Cookies["user"];
+        long UserId = Convert.ToInt64(cookie.Values["UserName"]);// Convert.ToInt64(cookie.Values["UserId"]);
+        var items = from item in db.User
+                    where item.USERID == UserId
+                    select item;
+        User user = items.FirstOrDefault();
+        CurrentUserRole = user.Role.ROLENAME;
+        IsInRole = (CurrentUserRole == "销售总监");
+    }
+    }
+    
+    @if (IsInRole)
+    {
+        <tr>
+
+                <td class="tableleft">状态</td>
+                <td>
+                    <select id="USERSTATE">
+                        @if (Model.USERSTATE.HasValue  && Model.USERSTATE.Value)
+                        {
+                            <option value="1" selected>启用</option>
+                        <option value="0">禁用</option>
+                        }
+                        else
+                        {
+                             <option value="1">启用</option>
+                        <option value="0" selected>禁用</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+    }*@
+            
+
+            <tr>
+                <td class="tableleft"></td>
+                <td>
+                    <button type="submit" class="btn btn-success" type="button">保存</button> 
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

@@ -221,6 +221,7 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\aliyun.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - FTP %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\CrmOnline - FTP.pubxml" />
