@@ -55,10 +55,11 @@
                 <li><a href="javascript:;" onclick="BatchMove(3,'移入废弃池');">移入废弃池</a></li>
                 <li><a href="javascript:;" onclick="ShowDiag();">批量更新</a></li>
                 @if (ViewBag.IsDirectorRole)
-                {
-                    
-                    <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
-                }
+    {
+
+            <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
+            <li><a href="javascript:;" onclick="Export();">导出Excel</a></li>
+}
             </ul>
         </div>
     }
@@ -213,8 +214,15 @@
             art.dialog('信息提示：没有选择任何要更新的客户，请选择！');
             return;
         }
+        artDialog.data("CustomerIds", ids); //将值存起来
         art.dialog.open("/Customer/BatchOperation?CustomerIds=" + ids, { title: '批量更新', width: 320, height: 300 });
     }
+
+    //导出EXCEL
+    function Export() {
+        window.location.href = "/Customer/Export_Public?" + $("form").serialize();
+    }
+
 
     function ClearDiag() {
         var ids = GetCustomerIds();

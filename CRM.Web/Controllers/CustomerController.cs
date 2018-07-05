@@ -9,6 +9,9 @@ using PagedList;
 using PagedList.Mvc;
 using System.Text;
 using System.Configuration;
+using System.Threading.Tasks;
+using System.IO;
+
 namespace CRM.Web.Controllers
 {
     public class CustomerController : BaseController
@@ -594,9 +597,9 @@ namespace CRM.Web.Controllers
             return View(customers.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult BatchOperation(string CustomerIds)
+        public ActionResult BatchOperation()
         {
-            ViewBag.CustomerIds = CustomerIds;
+            //ViewBag.CustomerIds = CustomerIds;
 
             User currentUser = GetCurrentUser();
             
@@ -622,47 +625,55 @@ namespace CRM.Web.Controllers
         /// <param name="NextContractTime"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult BatchOperation(string CustomerIds, long? Owner, string Status, string NextContractTime)
+        public ActionResult BatchOperation(Operator @operator)
         {
             try
             {
-                long DepartmentID = 0;
-                if (Owner.HasValue && Owner.Value > 0)
-                {
-                    //所有者所在部门
-                    DepartmentID = db.User.Where(c => c.USERID == Owner.Value).SingleOrDefault().DEPARTMENTID;
-                }
-                string[] ids = CustomerIds.Split(new char[] { ',' });
-                foreach (var id in ids)
-                {
-                    long cid = Convert.ToInt64(id);
-                    Customer model = db.Customer.Where(c => c.CustomerID == cid).SingleOrDefault();
-                    model.LastModify = DateTime.Now;
-                    //更新所有者
-                    if (Owner.HasValue && Owner.Value > 0)
+                Task.Run(() => {
+
+                    using (Iso58Entities contenxt = new Iso58Entities())
                     {
-                        model.Owner = Owner.Value;
-                        if (DepartmentID > 0)
+
+                        long DepartmentID = 0;
+                        if (@operator.Owner.HasValue && @operator.Owner.Value > 0)
                         {
                             //所有者所在部门
-                            model.DepartmentID = DepartmentID;
+                            DepartmentID = contenxt.User.Where(c => c.USERID == @operator.Owner.Value).SingleOrDefault().DEPARTMENTID;
                         }
-                        //最新入库时间
-                        model.BelongDateTime = DateTime.Now;
-                        model.PoolStatus = privateTag;
+                        string[] ids = @operator.CustomerIds.Split(new char[] { ',' });
+                        foreach (var id in ids)
+                        {
+                            long cid = Convert.ToInt64(id);
+                            Customer model = contenxt.Customer.Where(c => c.CustomerID == cid).SingleOrDefault();
+                            model.LastModify = DateTime.Now;
+                            //更新所有者
+                            if (@operator.Owner.HasValue && @operator.Owner.Value > 0)
+                            {
+                                model.Owner = @operator.Owner.Value;
+                                if (DepartmentID > 0)
+                                {
+                                    //所有者所在部门
+                                    model.DepartmentID = DepartmentID;
+                                }
+                                //最新入库时间
+                                model.BelongDateTime = DateTime.Now;
+                                model.PoolStatus = privateTag;
+                            }
+                            if (!string.IsNullOrEmpty(@operator.Status))
+                            {
+                                model.Status = @operator.Status;
+                            }
+                            if (!string.IsNullOrEmpty(@operator.NextContractTime))
+                            {
+                                model.NextContactTime = Convert.ToDateTime(@operator.NextContractTime);
+                            }
+                            model.LastModify = DateTime.Now;
+                            contenxt.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                            contenxt.SaveChanges();
+                        }
                     }
-                    if (!string.IsNullOrEmpty(Status))
-                    {
-                        model.Status = Status;
-                    }
-                    if (!string.IsNullOrEmpty(NextContractTime))
-                    {
-                        model.NextContactTime = Convert.ToDateTime(NextContractTime);
-                    }
-                    model.LastModify = DateTime.Now;
-                    db.Entry(model).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+                    
+                });
             }
             catch (Exception ex)
             {
@@ -963,6 +974,12 @@ namespace CRM.Web.Controllers
             var items=db.Customer.Where(c => c.Owner == currentUser.USERID && c.PoolStatus.Value == privateTag);
 
             bool isGreater = false;
+            if(currentUser.Department.DEPARTMENTNAME.Equals("客服部"))
+            {
+                limit = 20000;
+                isGreater = items.Count() > limit ? true : false;
+                return new Tuple<bool, int, int>(isGreater, items.Count(), limit);
+            }
             if (currentUser.Role.ROLENAME == "销售经理")
             {
                 limit = ManagerLimitCustomer;
@@ -1060,5 +1077,743 @@ namespace CRM.Web.Controllers
                          select new { CustomerID=item.CustomerID, CorporationName=item.CorporationName };
             return Json(values.ToList(), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public FileResult Export(string CorporationName, string fromType, string DepartmentId, string Owner, string status, string NextContractStartTime, string NextContractEndTime, string TelePhone, string MobilePhone, string UpdateStartTime, string UpdateEndTime, int? page)
+        {
+
+            var customers = from item in db.Customer
+                            where item.PoolStatus.Value == privateTag
+                            select item;
+            if (!string.IsNullOrEmpty(CorporationName))
+            {
+                customers = customers.Where(x => x.CorporationName.Contains(CorporationName));
+            }
+            if (!string.IsNullOrEmpty(TelePhone))
+            {
+                customers = customers.Where(x => x.Tel.Contains(TelePhone));
+            }
+            if (!string.IsNullOrEmpty(MobilePhone))
+            {
+                customers = customers.Where(x => x.MobileTel.Contains(MobilePhone));
+            }
+
+            long depId = Convert.ToInt64(DepartmentId);
+            if (depId > 0)
+            {
+                customers = customers.Where(c => c.DepartmentID == depId);
+            }
+            //if (Owner == null)
+            //{
+            //    long id = GetCurrentUser().USERID;
+            //    customers = customers.Where(x => x.Owner == id);
+            //}
+            if (Owner != null && Owner != "0")
+            {
+                long userId = Convert.ToInt64(Owner);
+                customers = customers.Where(x => x.Owner == userId);
+            }
+            if (!string.IsNullOrEmpty(fromType))
+            {
+                customers = customers.Where(x => x.SourseFrom == fromType);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                customers = customers.Where(x => x.Status == status);
+            }
+            if (!string.IsNullOrEmpty(NextContractStartTime) && !string.IsNullOrEmpty(NextContractEndTime))
+            {
+                DateTime st = DateTime.Parse(DateTime.Parse(NextContractStartTime).ToString("yyyy-MM-dd 00:00:00"));
+                DateTime et = DateTime.Parse(DateTime.Parse(NextContractEndTime).ToString("yyyy-MM-dd 23:59:59"));
+                customers = customers.Where(x => x.NextContactTime.Value >= st && x.NextContactTime <= et);
+            }
+            if (!string.IsNullOrEmpty(UpdateStartTime) && !string.IsNullOrEmpty(UpdateEndTime))
+            {
+                DateTime st = DateTime.Parse(DateTime.Parse(UpdateStartTime).ToString("yyyy-MM-dd 00:00:00"));
+                DateTime et = DateTime.Parse(DateTime.Parse(UpdateEndTime).ToString("yyyy-MM-dd 23:59:59"));
+                customers = customers.Where(x => x.LastModify.Value >= st && x.LastModify <= et);
+            }
+
+            //过滤角色数据
+            customers = Filter(customers);
+
+            var list = customers.ToList();
+
+            //创建Excel文件的对象
+            NPOI.HSSF.UserModel.HSSFWorkbook book = new NPOI.HSSF.UserModel.HSSFWorkbook();
+            //添加一个sheet
+            NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
+
+            /*
+             * SELECT top 100
+      [CorporationName] as 公司名称
+	  ,[CustomerName] as 联系人
+      ,[Tel] as 电话
+      ,[Fax] as 传真
+	  ,[Email] as 邮箱
+      ,[City]as 城市
+      ,[MobileTel] as 手机
+      ,[SourseFrom] as 来源
+	   ,[Status] as 状态
+      ,[Industry] as 行业
+	   ,[Province] as 省份
+      ,[RegisteredCapital] as 城市
+      ,[Address] as 地址
+      ,[WebSite] as 网址
+      ,[DepartmentID] as 归属销售部门
+      ,[CustomerType] as 客户类型
+      ,[NextContactTime] as 下次联系时间
+      ,[LastModify] as 最近修改时间
+	  ,[CreateDate] as 创建时间
+	  ,[Creator] as 创建人
+	   ,[Owner] as 客户归属
+	  ,[BelongDateTime] 客户归属变更时间
+      ,replace(replace([Description],char(10),' '),char(13),' ') as 描述
+	   ,[WebSiteRemark] as 备注
+  FROM [dbo].[Customer] 
+             */
+
+            //给sheet1添加第一行的头部标题
+            NPOI.SS.UserModel.IRow row1 = sheet1.CreateRow(0);
+            row1.CreateCell(0).SetCellValue("ID");
+            row1.CreateCell(1).SetCellValue("公司名称");
+            row1.CreateCell(2).SetCellValue("联系人");
+            row1.CreateCell(3).SetCellValue("电话");
+            row1.CreateCell(4).SetCellValue("传真");
+            row1.CreateCell(5).SetCellValue("邮箱");
+            row1.CreateCell(6).SetCellValue("手机");
+            row1.CreateCell(7).SetCellValue("来源");
+            row1.CreateCell(8).SetCellValue("状态");
+            row1.CreateCell(9).SetCellValue("行业");
+            row1.CreateCell(10).SetCellValue("省份");
+            row1.CreateCell(11).SetCellValue("城市");
+            row1.CreateCell(12).SetCellValue("地址");
+            row1.CreateCell(13).SetCellValue("归属销售部门");
+            row1.CreateCell(14).SetCellValue("网址");
+            row1.CreateCell(15).SetCellValue("客户类型");
+            row1.CreateCell(16).SetCellValue("下次联系时间");
+            row1.CreateCell(17).SetCellValue("最近修改时间");
+            row1.CreateCell(18).SetCellValue("创建时间");
+            row1.CreateCell(19).SetCellValue("创建人");
+            row1.CreateCell(20).SetCellValue("客户归属");
+            row1.CreateCell(21).SetCellValue("客户归属变更时间");
+            row1.CreateCell(22).SetCellValue("描述");
+            row1.CreateCell(23).SetCellValue("备注");
+
+            row1.CreateCell(24).SetCellValue("第1次联系时间");
+            row1.CreateCell(25).SetCellValue("联系内容");
+            row1.CreateCell(26).SetCellValue("第2次联系时间");
+            row1.CreateCell(27).SetCellValue("联系内容");
+            row1.CreateCell(28).SetCellValue("第3次联系时间");
+            row1.CreateCell(29).SetCellValue("联系内容");
+            row1.CreateCell(30).SetCellValue("第4次联系时间");
+            row1.CreateCell(31).SetCellValue("联系内容");
+            row1.CreateCell(32).SetCellValue("第5次联系时间");
+            row1.CreateCell(33).SetCellValue("联系内容");
+            row1.CreateCell(34).SetCellValue("第6次联系时间");
+            row1.CreateCell(35).SetCellValue("联系内容");
+            row1.CreateCell(36).SetCellValue("第7次联系时间");
+            row1.CreateCell(37).SetCellValue("联系内容");
+            row1.CreateCell(38).SetCellValue("第8次联系时间");
+            row1.CreateCell(39).SetCellValue("联系内容");
+            row1.CreateCell(40).SetCellValue("第9次联系时间");
+            row1.CreateCell(41).SetCellValue("联系内容");
+            row1.CreateCell(42).SetCellValue("第10次联系时间");
+            row1.CreateCell(43).SetCellValue("联系内容");
+
+            row1.CreateCell(44).SetCellValue("第11次联系时间");
+            row1.CreateCell(45).SetCellValue("联系内容");
+            row1.CreateCell(46).SetCellValue("第12次联系时间");
+            row1.CreateCell(47).SetCellValue("联系内容");
+            row1.CreateCell(48).SetCellValue("第13次联系时间");
+            row1.CreateCell(49).SetCellValue("联系内容");
+            row1.CreateCell(50).SetCellValue("第14次联系时间");
+            row1.CreateCell(51).SetCellValue("联系内容");
+            row1.CreateCell(52).SetCellValue("第15次联系时间");
+            row1.CreateCell(53).SetCellValue("联系内容");
+            row1.CreateCell(54).SetCellValue("第16次联系时间");
+            row1.CreateCell(55).SetCellValue("联系内容");
+            row1.CreateCell(56).SetCellValue("第17次联系时间");
+            row1.CreateCell(57).SetCellValue("联系内容");
+            row1.CreateCell(58).SetCellValue("第18次联系时间");
+            row1.CreateCell(59).SetCellValue("联系内容");
+            row1.CreateCell(60).SetCellValue("第19次联系时间");
+            row1.CreateCell(61).SetCellValue("联系内容");
+            row1.CreateCell(62).SetCellValue("第20次联系时间");
+            row1.CreateCell(63).SetCellValue("联系内容");
+
+            //将数据逐步写入sheet1各个行
+            for (int i = 0; i < list.Count(); i++)
+            {
+                NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);
+                rowtemp.CreateCell(0).SetCellValue(list[i].CustomerID);
+                rowtemp.CreateCell(1).SetCellValue(list[i].CorporationName);
+                rowtemp.CreateCell(2).SetCellValue(list[i].CustomerName);
+                rowtemp.CreateCell(3).SetCellValue(list[i].Tel);
+                rowtemp.CreateCell(4).SetCellValue(list[i].Fax);
+                rowtemp.CreateCell(5).SetCellValue(list[i].Email);
+                rowtemp.CreateCell(6).SetCellValue(list[i].MobileTel);
+                rowtemp.CreateCell(7).SetCellValue(list[i].SourseFrom);
+                rowtemp.CreateCell(8).SetCellValue(list[i].Status);
+                rowtemp.CreateCell(9).SetCellValue(list[i].Industry);
+                rowtemp.CreateCell(10).SetCellValue(list[i].Province);
+                rowtemp.CreateCell(11).SetCellValue(list[i].City);
+                rowtemp.CreateCell(12).SetCellValue(list[i].Address);
+                rowtemp.CreateCell(13).SetCellValue(list[i].Department.DEPARTMENTNAME);
+                rowtemp.CreateCell(14).SetCellValue(list[i].WebSite);
+                rowtemp.CreateCell(15).SetCellValue(list[i].CustomerType);
+                rowtemp.CreateCell(16).SetCellValue(list[i].NextContactTime.HasValue?list[i].NextContactTime.Value:DateTime.MinValue);
+                rowtemp.CreateCell(17).SetCellValue(list[i].LastModify.HasValue?list[i].LastModify.Value:DateTime.MinValue);
+                rowtemp.CreateCell(18).SetCellValue(list[i].CreateDate.HasValue?list[i].CreateDate.Value:DateTime.MinValue);
+                rowtemp.CreateCell(19).SetCellValue(list[i].Creator.HasValue?list[i].Creator.Value:0);
+                rowtemp.CreateCell(20).SetCellValue(list[i].Owner);
+                rowtemp.CreateCell(21).SetCellValue(list[i].BelongDateTime.HasValue? list[i].BelongDateTime.Value:DateTime.MinValue);
+                rowtemp.CreateCell(22).SetCellValue(list[i].Description);
+                rowtemp.CreateCell(23).SetCellValue(list[i].WebSiteRemark);
+
+                rowtemp.CreateCell(24).SetCellValue(list[i].FirstContactDate.HasValue ? list[i].FirstContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(25).SetCellValue(list[i].FirstRemark);
+
+                rowtemp.CreateCell(26).SetCellValue(list[i].SecondContactDate.HasValue ? list[i].SecondContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(27).SetCellValue(list[i].SecondRemark);
+
+                rowtemp.CreateCell(28).SetCellValue(list[i].ThirdContactDate.HasValue ? list[i].ThirdContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(29).SetCellValue(list[i].ThirdRemark);
+
+                rowtemp.CreateCell(30).SetCellValue(list[i].FourthContactDate.HasValue ? list[i].FourthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(31).SetCellValue(list[i].FourthRemark);
+
+                rowtemp.CreateCell(32).SetCellValue(list[i].FifthContactDate.HasValue ? list[i].FifthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(33).SetCellValue(list[i].FifthRemark);
+
+                rowtemp.CreateCell(34).SetCellValue(list[i].SixthContactDate.HasValue ? list[i].SixthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(35).SetCellValue(list[i].SixthRemark);
+
+                rowtemp.CreateCell(36).SetCellValue(list[i].SeventhContactDate.HasValue ? list[i].SeventhContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(37).SetCellValue(list[i].SeventhRemark);
+
+                rowtemp.CreateCell(38).SetCellValue(list[i].EighthContactDate.HasValue ? list[i].EighthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(39).SetCellValue(list[i].EighthRemark);
+
+                rowtemp.CreateCell(40).SetCellValue(list[i].NinthContactDate.HasValue ? list[i].NinthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(41).SetCellValue(list[i].NinthRemark);
+
+                rowtemp.CreateCell(42).SetCellValue(list[i].TenthContactDate.HasValue ? list[i].TenthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(43).SetCellValue(list[i].TenthRemark);
+
+                rowtemp.CreateCell(44).SetCellValue(list[i].ElevenContactDate.HasValue ? list[i].ElevenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(45).SetCellValue(list[i].ElevenRemark);
+
+                rowtemp.CreateCell(46).SetCellValue(list[i].twelveContactDate.HasValue ? list[i].twelveContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(47).SetCellValue(list[i].twelveRemark);
+
+                rowtemp.CreateCell(48).SetCellValue(list[i].thirteenContactDate.HasValue ? list[i].thirteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(49).SetCellValue(list[i].thirteenRemark);
+
+                rowtemp.CreateCell(50).SetCellValue(list[i].fourteenContactDate.HasValue ? list[i].fourteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(51).SetCellValue(list[i].fourteenRemark);
+
+                rowtemp.CreateCell(52).SetCellValue(list[i].fifteenContactDate.HasValue ? list[i].fifteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(53).SetCellValue(list[i].fifteenRemark);
+
+                rowtemp.CreateCell(54).SetCellValue(list[i].sixteenContactDate.HasValue ? list[i].sixteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(55).SetCellValue(list[i].sixteenRemark);
+
+                rowtemp.CreateCell(56).SetCellValue(list[i].seventeenContactDate.HasValue ? list[i].seventeenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(57).SetCellValue(list[i].seventeenRemark);
+
+                rowtemp.CreateCell(58).SetCellValue(list[i].eighteenContactDate.HasValue ? list[i].eighteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(59).SetCellValue(list[i].eighteenRemark);
+
+                rowtemp.CreateCell(60).SetCellValue(list[i].nineteenContactDate.HasValue ? list[i].nineteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(61).SetCellValue(list[i].nineteenRemark);
+
+                rowtemp.CreateCell(62).SetCellValue(list[i].twentyContactDate.HasValue ? list[i].twentyContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(63).SetCellValue(list[i].twentyRemark);
+            }
+            // 写入到客户端 
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            book.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return File(ms, "application/vnd.ms-excel", DateTime.Today.ToLongDateString()+"_我的客户信息.xls");
+        }
+
+        [HttpGet]
+        public FileResult Export_Public(string CorporationName, string fromType, string status, string TelePhone, string MobilePhone, int? page)
+        {
+
+            var customers = from item in db.Customer
+                            where item.PoolStatus.Value == publicTag
+                            select item;
+            if (!string.IsNullOrEmpty(CorporationName))
+            {
+                customers = customers.Where(x => x.CorporationName.Contains(CorporationName));
+            }
+            if (!string.IsNullOrEmpty(TelePhone))
+            {
+                customers = customers.Where(x => x.Tel.Contains(TelePhone));
+            }
+            if (!string.IsNullOrEmpty(MobilePhone))
+            {
+                customers = customers.Where(x => x.MobileTel.Contains(MobilePhone));
+            }
+
+          
+            if (!string.IsNullOrEmpty(fromType))
+            {
+                customers = customers.Where(x => x.SourseFrom == fromType);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                customers = customers.Where(x => x.Status == status);
+            }
+          
+            //过滤角色数据
+            customers = Filter(customers);
+
+            var list = customers.ToList();
+
+            //创建Excel文件的对象
+            NPOI.HSSF.UserModel.HSSFWorkbook book = new NPOI.HSSF.UserModel.HSSFWorkbook();
+            //添加一个sheet
+            NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
+
+            /*
+             * SELECT top 100
+      [CorporationName] as 公司名称
+	  ,[CustomerName] as 联系人
+      ,[Tel] as 电话
+      ,[Fax] as 传真
+	  ,[Email] as 邮箱
+      ,[City]as 城市
+      ,[MobileTel] as 手机
+      ,[SourseFrom] as 来源
+	   ,[Status] as 状态
+      ,[Industry] as 行业
+	   ,[Province] as 省份
+      ,[RegisteredCapital] as 城市
+      ,[Address] as 地址
+      ,[WebSite] as 网址
+      ,[DepartmentID] as 归属销售部门
+      ,[CustomerType] as 客户类型
+      ,[NextContactTime] as 下次联系时间
+      ,[LastModify] as 最近修改时间
+	  ,[CreateDate] as 创建时间
+	  ,[Creator] as 创建人
+	   ,[Owner] as 客户归属
+	  ,[BelongDateTime] 客户归属变更时间
+      ,replace(replace([Description],char(10),' '),char(13),' ') as 描述
+	   ,[WebSiteRemark] as 备注
+  FROM [dbo].[Customer] 
+             */
+
+            //给sheet1添加第一行的头部标题
+            NPOI.SS.UserModel.IRow row1 = sheet1.CreateRow(0);
+            row1.CreateCell(0).SetCellValue("ID");
+            row1.CreateCell(1).SetCellValue("公司名称");
+            row1.CreateCell(2).SetCellValue("联系人");
+            row1.CreateCell(3).SetCellValue("电话");
+            row1.CreateCell(4).SetCellValue("传真");
+            row1.CreateCell(5).SetCellValue("邮箱");
+            row1.CreateCell(6).SetCellValue("手机");
+            row1.CreateCell(7).SetCellValue("来源");
+            row1.CreateCell(8).SetCellValue("状态");
+            row1.CreateCell(9).SetCellValue("行业");
+            row1.CreateCell(10).SetCellValue("省份");
+            row1.CreateCell(11).SetCellValue("城市");
+            row1.CreateCell(12).SetCellValue("地址");
+            row1.CreateCell(13).SetCellValue("归属销售部门");
+            row1.CreateCell(14).SetCellValue("网址");
+            row1.CreateCell(15).SetCellValue("客户类型");
+            row1.CreateCell(16).SetCellValue("下次联系时间");
+            row1.CreateCell(17).SetCellValue("最近修改时间");
+            row1.CreateCell(18).SetCellValue("创建时间");
+            row1.CreateCell(19).SetCellValue("创建人");
+            row1.CreateCell(20).SetCellValue("客户归属");
+            row1.CreateCell(21).SetCellValue("客户归属变更时间");
+            row1.CreateCell(22).SetCellValue("描述");
+            row1.CreateCell(23).SetCellValue("备注");
+
+            row1.CreateCell(24).SetCellValue("第1次联系时间");
+            row1.CreateCell(25).SetCellValue("联系内容");
+            row1.CreateCell(26).SetCellValue("第2次联系时间");
+            row1.CreateCell(27).SetCellValue("联系内容");
+            row1.CreateCell(28).SetCellValue("第3次联系时间");
+            row1.CreateCell(29).SetCellValue("联系内容");
+            row1.CreateCell(30).SetCellValue("第4次联系时间");
+            row1.CreateCell(31).SetCellValue("联系内容");
+            row1.CreateCell(32).SetCellValue("第5次联系时间");
+            row1.CreateCell(33).SetCellValue("联系内容");
+            row1.CreateCell(34).SetCellValue("第6次联系时间");
+            row1.CreateCell(35).SetCellValue("联系内容");
+            row1.CreateCell(36).SetCellValue("第7次联系时间");
+            row1.CreateCell(37).SetCellValue("联系内容");
+            row1.CreateCell(38).SetCellValue("第8次联系时间");
+            row1.CreateCell(39).SetCellValue("联系内容");
+            row1.CreateCell(40).SetCellValue("第9次联系时间");
+            row1.CreateCell(41).SetCellValue("联系内容");
+            row1.CreateCell(42).SetCellValue("第10次联系时间");
+            row1.CreateCell(43).SetCellValue("联系内容");
+
+            row1.CreateCell(44).SetCellValue("第11次联系时间");
+            row1.CreateCell(45).SetCellValue("联系内容");
+            row1.CreateCell(46).SetCellValue("第12次联系时间");
+            row1.CreateCell(47).SetCellValue("联系内容");
+            row1.CreateCell(48).SetCellValue("第13次联系时间");
+            row1.CreateCell(49).SetCellValue("联系内容");
+            row1.CreateCell(50).SetCellValue("第14次联系时间");
+            row1.CreateCell(51).SetCellValue("联系内容");
+            row1.CreateCell(52).SetCellValue("第15次联系时间");
+            row1.CreateCell(53).SetCellValue("联系内容");
+            row1.CreateCell(54).SetCellValue("第16次联系时间");
+            row1.CreateCell(55).SetCellValue("联系内容");
+            row1.CreateCell(56).SetCellValue("第17次联系时间");
+            row1.CreateCell(57).SetCellValue("联系内容");
+            row1.CreateCell(58).SetCellValue("第18次联系时间");
+            row1.CreateCell(59).SetCellValue("联系内容");
+            row1.CreateCell(60).SetCellValue("第19次联系时间");
+            row1.CreateCell(61).SetCellValue("联系内容");
+            row1.CreateCell(62).SetCellValue("第20次联系时间");
+            row1.CreateCell(63).SetCellValue("联系内容");
+
+            //将数据逐步写入sheet1各个行
+            for (int i = 0; i < list.Count(); i++)
+            {
+                NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);
+                rowtemp.CreateCell(0).SetCellValue(list[i].CustomerID);
+                rowtemp.CreateCell(1).SetCellValue(list[i].CorporationName);
+                rowtemp.CreateCell(2).SetCellValue(list[i].CustomerName);
+                rowtemp.CreateCell(3).SetCellValue(list[i].Tel);
+                rowtemp.CreateCell(4).SetCellValue(list[i].Fax);
+                rowtemp.CreateCell(5).SetCellValue(list[i].Email);
+                rowtemp.CreateCell(6).SetCellValue(list[i].MobileTel);
+                rowtemp.CreateCell(7).SetCellValue(list[i].SourseFrom);
+                rowtemp.CreateCell(8).SetCellValue(list[i].Status);
+                rowtemp.CreateCell(9).SetCellValue(list[i].Industry);
+                rowtemp.CreateCell(10).SetCellValue(list[i].Province);
+                rowtemp.CreateCell(11).SetCellValue(list[i].City);
+                rowtemp.CreateCell(12).SetCellValue(list[i].Address);
+                rowtemp.CreateCell(13).SetCellValue(list[i].Department.DEPARTMENTNAME);
+                rowtemp.CreateCell(14).SetCellValue(list[i].WebSite);
+                rowtemp.CreateCell(15).SetCellValue(list[i].CustomerType);
+                rowtemp.CreateCell(16).SetCellValue(list[i].NextContactTime.HasValue ? list[i].NextContactTime.Value : DateTime.MinValue);
+                rowtemp.CreateCell(17).SetCellValue(list[i].LastModify.HasValue ? list[i].LastModify.Value : DateTime.MinValue);
+                rowtemp.CreateCell(18).SetCellValue(list[i].CreateDate.HasValue ? list[i].CreateDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(19).SetCellValue(list[i].Creator.HasValue ? list[i].Creator.Value : 0);
+                rowtemp.CreateCell(20).SetCellValue(list[i].Owner);
+                rowtemp.CreateCell(21).SetCellValue(list[i].BelongDateTime.HasValue ? list[i].BelongDateTime.Value : DateTime.MinValue);
+                rowtemp.CreateCell(22).SetCellValue(list[i].Description);
+                rowtemp.CreateCell(23).SetCellValue(list[i].WebSiteRemark);
+
+                rowtemp.CreateCell(24).SetCellValue(list[i].FirstContactDate.HasValue ? list[i].FirstContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(25).SetCellValue(list[i].FirstRemark);
+
+                rowtemp.CreateCell(26).SetCellValue(list[i].SecondContactDate.HasValue ? list[i].SecondContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(27).SetCellValue(list[i].SecondRemark);
+
+                rowtemp.CreateCell(28).SetCellValue(list[i].ThirdContactDate.HasValue ? list[i].ThirdContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(29).SetCellValue(list[i].ThirdRemark);
+
+                rowtemp.CreateCell(30).SetCellValue(list[i].FourthContactDate.HasValue ? list[i].FourthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(31).SetCellValue(list[i].FourthRemark);
+
+                rowtemp.CreateCell(32).SetCellValue(list[i].FifthContactDate.HasValue ? list[i].FifthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(33).SetCellValue(list[i].FifthRemark);
+
+                rowtemp.CreateCell(34).SetCellValue(list[i].SixthContactDate.HasValue ? list[i].SixthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(35).SetCellValue(list[i].SixthRemark);
+
+                rowtemp.CreateCell(36).SetCellValue(list[i].SeventhContactDate.HasValue ? list[i].SeventhContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(37).SetCellValue(list[i].SeventhRemark);
+
+                rowtemp.CreateCell(38).SetCellValue(list[i].EighthContactDate.HasValue ? list[i].EighthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(39).SetCellValue(list[i].EighthRemark);
+
+                rowtemp.CreateCell(40).SetCellValue(list[i].NinthContactDate.HasValue ? list[i].NinthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(41).SetCellValue(list[i].NinthRemark);
+
+                rowtemp.CreateCell(42).SetCellValue(list[i].TenthContactDate.HasValue ? list[i].TenthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(43).SetCellValue(list[i].TenthRemark);
+
+                rowtemp.CreateCell(44).SetCellValue(list[i].ElevenContactDate.HasValue ? list[i].ElevenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(45).SetCellValue(list[i].ElevenRemark);
+
+                rowtemp.CreateCell(46).SetCellValue(list[i].twelveContactDate.HasValue ? list[i].twelveContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(47).SetCellValue(list[i].twelveRemark);
+
+                rowtemp.CreateCell(48).SetCellValue(list[i].thirteenContactDate.HasValue ? list[i].thirteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(49).SetCellValue(list[i].thirteenRemark);
+
+                rowtemp.CreateCell(50).SetCellValue(list[i].fourteenContactDate.HasValue ? list[i].fourteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(51).SetCellValue(list[i].fourteenRemark);
+
+                rowtemp.CreateCell(52).SetCellValue(list[i].fifteenContactDate.HasValue ? list[i].fifteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(53).SetCellValue(list[i].fifteenRemark);
+
+                rowtemp.CreateCell(54).SetCellValue(list[i].sixteenContactDate.HasValue ? list[i].sixteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(55).SetCellValue(list[i].sixteenRemark);
+
+                rowtemp.CreateCell(56).SetCellValue(list[i].seventeenContactDate.HasValue ? list[i].seventeenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(57).SetCellValue(list[i].seventeenRemark);
+
+                rowtemp.CreateCell(58).SetCellValue(list[i].eighteenContactDate.HasValue ? list[i].eighteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(59).SetCellValue(list[i].eighteenRemark);
+
+                rowtemp.CreateCell(60).SetCellValue(list[i].nineteenContactDate.HasValue ? list[i].nineteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(61).SetCellValue(list[i].nineteenRemark);
+
+                rowtemp.CreateCell(62).SetCellValue(list[i].twentyContactDate.HasValue ? list[i].twentyContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(63).SetCellValue(list[i].twentyRemark);
+            }
+            // 写入到客户端 
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            book.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return File(ms, "application/vnd.ms-excel", DateTime.Today.ToLongDateString() + "_公共池_客户信息.xls");
+        }
+
+        [HttpGet]
+        public FileResult Export_Waste(string CorporationName, string fromType, string status, string TelePhone, string MobilePhone, int? page)
+        {
+
+            var customers = from item in db.Customer
+                            where item.PoolStatus.Value == publicTag
+                            select item;
+            if (!string.IsNullOrEmpty(CorporationName))
+            {
+                customers = customers.Where(x => x.CorporationName.Contains(CorporationName));
+            }
+            if (!string.IsNullOrEmpty(TelePhone))
+            {
+                customers = customers.Where(x => x.Tel.Contains(TelePhone));
+            }
+            if (!string.IsNullOrEmpty(MobilePhone))
+            {
+                customers = customers.Where(x => x.MobileTel.Contains(MobilePhone));
+            }
+           
+            if (!string.IsNullOrEmpty(fromType))
+            {
+                customers = customers.Where(x => x.SourseFrom == fromType);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                customers = customers.Where(x => x.Status == status);
+            }
+          
+
+            //过滤角色数据
+            customers = Filter(customers);
+
+            var list = customers.ToList();
+
+            //创建Excel文件的对象
+            NPOI.HSSF.UserModel.HSSFWorkbook book = new NPOI.HSSF.UserModel.HSSFWorkbook();
+            //添加一个sheet
+            NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
+
+            /*
+             * SELECT top 100
+      [CorporationName] as 公司名称
+	  ,[CustomerName] as 联系人
+      ,[Tel] as 电话
+      ,[Fax] as 传真
+	  ,[Email] as 邮箱
+      ,[City]as 城市
+      ,[MobileTel] as 手机
+      ,[SourseFrom] as 来源
+	   ,[Status] as 状态
+      ,[Industry] as 行业
+	   ,[Province] as 省份
+      ,[RegisteredCapital] as 城市
+      ,[Address] as 地址
+      ,[WebSite] as 网址
+      ,[DepartmentID] as 归属销售部门
+      ,[CustomerType] as 客户类型
+      ,[NextContactTime] as 下次联系时间
+      ,[LastModify] as 最近修改时间
+	  ,[CreateDate] as 创建时间
+	  ,[Creator] as 创建人
+	   ,[Owner] as 客户归属
+	  ,[BelongDateTime] 客户归属变更时间
+      ,replace(replace([Description],char(10),' '),char(13),' ') as 描述
+	   ,[WebSiteRemark] as 备注
+  FROM [dbo].[Customer] 
+             */
+
+            //给sheet1添加第一行的头部标题
+            NPOI.SS.UserModel.IRow row1 = sheet1.CreateRow(0);
+            row1.CreateCell(0).SetCellValue("ID");
+            row1.CreateCell(1).SetCellValue("公司名称");
+            row1.CreateCell(2).SetCellValue("联系人");
+            row1.CreateCell(3).SetCellValue("电话");
+            row1.CreateCell(4).SetCellValue("传真");
+            row1.CreateCell(5).SetCellValue("邮箱");
+            row1.CreateCell(6).SetCellValue("手机");
+            row1.CreateCell(7).SetCellValue("来源");
+            row1.CreateCell(8).SetCellValue("状态");
+            row1.CreateCell(9).SetCellValue("行业");
+            row1.CreateCell(10).SetCellValue("省份");
+            row1.CreateCell(11).SetCellValue("城市");
+            row1.CreateCell(12).SetCellValue("地址");
+            row1.CreateCell(13).SetCellValue("归属销售部门");
+            row1.CreateCell(14).SetCellValue("网址");
+            row1.CreateCell(15).SetCellValue("客户类型");
+            row1.CreateCell(16).SetCellValue("下次联系时间");
+            row1.CreateCell(17).SetCellValue("最近修改时间");
+            row1.CreateCell(18).SetCellValue("创建时间");
+            row1.CreateCell(19).SetCellValue("创建人");
+            row1.CreateCell(20).SetCellValue("客户归属");
+            row1.CreateCell(21).SetCellValue("客户归属变更时间");
+            row1.CreateCell(22).SetCellValue("描述");
+            row1.CreateCell(23).SetCellValue("备注");
+
+            row1.CreateCell(24).SetCellValue("第1次联系时间");
+            row1.CreateCell(25).SetCellValue("联系内容");
+            row1.CreateCell(26).SetCellValue("第2次联系时间");
+            row1.CreateCell(27).SetCellValue("联系内容");
+            row1.CreateCell(28).SetCellValue("第3次联系时间");
+            row1.CreateCell(29).SetCellValue("联系内容");
+            row1.CreateCell(30).SetCellValue("第4次联系时间");
+            row1.CreateCell(31).SetCellValue("联系内容");
+            row1.CreateCell(32).SetCellValue("第5次联系时间");
+            row1.CreateCell(33).SetCellValue("联系内容");
+            row1.CreateCell(34).SetCellValue("第6次联系时间");
+            row1.CreateCell(35).SetCellValue("联系内容");
+            row1.CreateCell(36).SetCellValue("第7次联系时间");
+            row1.CreateCell(37).SetCellValue("联系内容");
+            row1.CreateCell(38).SetCellValue("第8次联系时间");
+            row1.CreateCell(39).SetCellValue("联系内容");
+            row1.CreateCell(40).SetCellValue("第9次联系时间");
+            row1.CreateCell(41).SetCellValue("联系内容");
+            row1.CreateCell(42).SetCellValue("第10次联系时间");
+            row1.CreateCell(43).SetCellValue("联系内容");
+
+            row1.CreateCell(44).SetCellValue("第11次联系时间");
+            row1.CreateCell(45).SetCellValue("联系内容");
+            row1.CreateCell(46).SetCellValue("第12次联系时间");
+            row1.CreateCell(47).SetCellValue("联系内容");
+            row1.CreateCell(48).SetCellValue("第13次联系时间");
+            row1.CreateCell(49).SetCellValue("联系内容");
+            row1.CreateCell(50).SetCellValue("第14次联系时间");
+            row1.CreateCell(51).SetCellValue("联系内容");
+            row1.CreateCell(52).SetCellValue("第15次联系时间");
+            row1.CreateCell(53).SetCellValue("联系内容");
+            row1.CreateCell(54).SetCellValue("第16次联系时间");
+            row1.CreateCell(55).SetCellValue("联系内容");
+            row1.CreateCell(56).SetCellValue("第17次联系时间");
+            row1.CreateCell(57).SetCellValue("联系内容");
+            row1.CreateCell(58).SetCellValue("第18次联系时间");
+            row1.CreateCell(59).SetCellValue("联系内容");
+            row1.CreateCell(60).SetCellValue("第19次联系时间");
+            row1.CreateCell(61).SetCellValue("联系内容");
+            row1.CreateCell(62).SetCellValue("第20次联系时间");
+            row1.CreateCell(63).SetCellValue("联系内容");
+
+            //将数据逐步写入sheet1各个行
+            for (int i = 0; i < list.Count(); i++)
+            {
+                NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);
+                rowtemp.CreateCell(0).SetCellValue(list[i].CustomerID);
+                rowtemp.CreateCell(1).SetCellValue(list[i].CorporationName);
+                rowtemp.CreateCell(2).SetCellValue(list[i].CustomerName);
+                rowtemp.CreateCell(3).SetCellValue(list[i].Tel);
+                rowtemp.CreateCell(4).SetCellValue(list[i].Fax);
+                rowtemp.CreateCell(5).SetCellValue(list[i].Email);
+                rowtemp.CreateCell(6).SetCellValue(list[i].MobileTel);
+                rowtemp.CreateCell(7).SetCellValue(list[i].SourseFrom);
+                rowtemp.CreateCell(8).SetCellValue(list[i].Status);
+                rowtemp.CreateCell(9).SetCellValue(list[i].Industry);
+                rowtemp.CreateCell(10).SetCellValue(list[i].Province);
+                rowtemp.CreateCell(11).SetCellValue(list[i].City);
+                rowtemp.CreateCell(12).SetCellValue(list[i].Address);
+                rowtemp.CreateCell(13).SetCellValue(list[i].Department.DEPARTMENTNAME);
+                rowtemp.CreateCell(14).SetCellValue(list[i].WebSite);
+                rowtemp.CreateCell(15).SetCellValue(list[i].CustomerType);
+                rowtemp.CreateCell(16).SetCellValue(list[i].NextContactTime.HasValue ? list[i].NextContactTime.Value : DateTime.MinValue);
+                rowtemp.CreateCell(17).SetCellValue(list[i].LastModify.HasValue ? list[i].LastModify.Value : DateTime.MinValue);
+                rowtemp.CreateCell(18).SetCellValue(list[i].CreateDate.HasValue ? list[i].CreateDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(19).SetCellValue(list[i].Creator.HasValue ? list[i].Creator.Value : 0);
+                rowtemp.CreateCell(20).SetCellValue(list[i].Owner);
+                rowtemp.CreateCell(21).SetCellValue(list[i].BelongDateTime.HasValue ? list[i].BelongDateTime.Value : DateTime.MinValue);
+                rowtemp.CreateCell(22).SetCellValue(list[i].Description);
+                rowtemp.CreateCell(23).SetCellValue(list[i].WebSiteRemark);
+
+                rowtemp.CreateCell(24).SetCellValue(list[i].FirstContactDate.HasValue ? list[i].FirstContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(25).SetCellValue(list[i].FirstRemark);
+
+                rowtemp.CreateCell(26).SetCellValue(list[i].SecondContactDate.HasValue ? list[i].SecondContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(27).SetCellValue(list[i].SecondRemark);
+
+                rowtemp.CreateCell(28).SetCellValue(list[i].ThirdContactDate.HasValue ? list[i].ThirdContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(29).SetCellValue(list[i].ThirdRemark);
+
+                rowtemp.CreateCell(30).SetCellValue(list[i].FourthContactDate.HasValue ? list[i].FourthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(31).SetCellValue(list[i].FourthRemark);
+
+                rowtemp.CreateCell(32).SetCellValue(list[i].FifthContactDate.HasValue ? list[i].FifthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(33).SetCellValue(list[i].FifthRemark);
+
+                rowtemp.CreateCell(34).SetCellValue(list[i].SixthContactDate.HasValue ? list[i].SixthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(35).SetCellValue(list[i].SixthRemark);
+
+                rowtemp.CreateCell(36).SetCellValue(list[i].SeventhContactDate.HasValue ? list[i].SeventhContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(37).SetCellValue(list[i].SeventhRemark);
+
+                rowtemp.CreateCell(38).SetCellValue(list[i].EighthContactDate.HasValue ? list[i].EighthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(39).SetCellValue(list[i].EighthRemark);
+
+                rowtemp.CreateCell(40).SetCellValue(list[i].NinthContactDate.HasValue ? list[i].NinthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(41).SetCellValue(list[i].NinthRemark);
+
+                rowtemp.CreateCell(42).SetCellValue(list[i].TenthContactDate.HasValue ? list[i].TenthContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(43).SetCellValue(list[i].TenthRemark);
+
+                rowtemp.CreateCell(44).SetCellValue(list[i].ElevenContactDate.HasValue ? list[i].ElevenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(45).SetCellValue(list[i].ElevenRemark);
+
+                rowtemp.CreateCell(46).SetCellValue(list[i].twelveContactDate.HasValue ? list[i].twelveContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(47).SetCellValue(list[i].twelveRemark);
+
+                rowtemp.CreateCell(48).SetCellValue(list[i].thirteenContactDate.HasValue ? list[i].thirteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(49).SetCellValue(list[i].thirteenRemark);
+
+                rowtemp.CreateCell(50).SetCellValue(list[i].fourteenContactDate.HasValue ? list[i].fourteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(51).SetCellValue(list[i].fourteenRemark);
+
+                rowtemp.CreateCell(52).SetCellValue(list[i].fifteenContactDate.HasValue ? list[i].fifteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(53).SetCellValue(list[i].fifteenRemark);
+
+                rowtemp.CreateCell(54).SetCellValue(list[i].sixteenContactDate.HasValue ? list[i].sixteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(55).SetCellValue(list[i].sixteenRemark);
+
+                rowtemp.CreateCell(56).SetCellValue(list[i].seventeenContactDate.HasValue ? list[i].seventeenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(57).SetCellValue(list[i].seventeenRemark);
+
+                rowtemp.CreateCell(58).SetCellValue(list[i].eighteenContactDate.HasValue ? list[i].eighteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(59).SetCellValue(list[i].eighteenRemark);
+
+                rowtemp.CreateCell(60).SetCellValue(list[i].nineteenContactDate.HasValue ? list[i].nineteenContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(61).SetCellValue(list[i].nineteenRemark);
+
+                rowtemp.CreateCell(62).SetCellValue(list[i].twentyContactDate.HasValue ? list[i].twentyContactDate.Value : DateTime.MinValue);
+                rowtemp.CreateCell(63).SetCellValue(list[i].twentyRemark);
+            }
+            // 写入到客户端 
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            book.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return File(ms, "application/vnd.ms-excel", DateTime.Today.ToLongDateString() + "_废弃池_客户信息.xls");
+        }
+
+        
+    }
+
+    public class Operator
+    {
+        public string CustomerIds { get; set; }
+        public long? Owner { get; set; }
+        public string Status { get; set; }
+        public string NextContractTime { get; set; }
     }
 }

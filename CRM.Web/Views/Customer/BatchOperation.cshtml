@@ -31,9 +31,18 @@
     function BatchSubmmit()
     {
         art.dialog.confirm('你确定要将所选客户进行批量更新吗？', function () {
-            var json = $("#batchForm").serialize();
-            //alert(json);
-            $.post('/Customer/BatchOperation', json, function (result) {
+            //var json = $("#batchForm").serialize();
+            var CustomerIds = art.dialog.data('CustomerIds'); // 读取子窗口返回的数据
+            var jsObj = {
+                "CustomerIds": CustomerIds,
+                "Owner": $("#Owner").val(),
+                "Status": $("#Status").val(),
+                "NextContractTime": $("#NextContractTime").val()
+            };
+            var json = JSON.stringify(jsObj);
+           // alert(str);
+
+            $.post('/Customer/BatchOperation', jsObj, function (result) {
                 if (result.success) {
                     art.dialog({
                         icon: 'succeed',
@@ -59,7 +68,7 @@
     }
 </script>
 <form id="batchForm">
-    @Html.Hidden("CustomerIds", ViewBag.CustomerIds as string)
+    @*@Html.Hidden("CustomerIds", ViewBag.CustomerIds as string)*@
     <div class="form-group">
         <label>
             <strong color:red;">更新所有者:</strong>

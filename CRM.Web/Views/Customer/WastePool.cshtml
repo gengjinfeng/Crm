@@ -144,6 +144,22 @@
         });
     }
 
+    function ShowDiag2() {
+        var ids = GetCustomerIds();
+        if (ids == undefined || ids.length == 0) {
+            art.dialog('信息提示：没有选择任何要更新的客户，请选择！');
+            return;
+        }
+        artDialog.data("CustomerIds", ids); //将值存起来
+        art.dialog.open("/Customer/BatchOperation?CustomerIds=" + ids, { title: '批量更新', width: 320, height: 300 });
+    }
+
+
+    //导出EXCEL
+    function Export() {
+        window.location.href = "/Customer/Export_Waste?" + $("form").serialize();
+    }
+
     function ClearDiag() {
         var ids = GetCustomerIds();
         if (ids == undefined || ids.length == 0) {
@@ -209,22 +225,30 @@
     }
 </p>
 <div class="table-responsive">
-    @if (ViewBag.IsDirectorRole)
-    {
+   
         <strong style="font-size:16px;color:red;">全选:</strong><input type="checkbox" id="checkall" name="checkall" />
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 批量操作 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right">
-                <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
-                <li><a href="javascript:;" onclick="ShowDiag();">删除</a></li>
+                @if (ViewBag.IsRole)
+    {
+            <li><a href="javascript:;" onclick="ShowDiag2();">批量更新</a></li>
+}
+
+                @if (ViewBag.IsDirectorRole)
+    {
+            <li><a href="javascript:;" onclick="Export();">导出Excel</a></li>
+            <li><a href="javascript:;" onclick="ClearDiag();">批量清除小计</a></li>
+            <li><a href="javascript:;" onclick="ShowDiag();">删除</a></li>
+}
             </ul>
         </div>
-    }
+   
     <table class="table table-striped table-bordered table-hover">
         <tr>
-            @if (ViewBag.IsDirectorRole)
+            @if (ViewBag.IsRole)
             {
                 <th>选择</th>
             }
@@ -251,7 +275,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                @if (ViewBag.IsDirectorRole)
+                @if (ViewBag.IsRole)
                 {
                     <td>
                         @Html.CheckBox("CustomerID", new { value = item.CustomerID })
